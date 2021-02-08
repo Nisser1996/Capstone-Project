@@ -94,9 +94,6 @@ public class EnrollServlet extends HttpServlet {
 				+ "        <input type=\"submit\" value=\"Submit\">\n"
 				+ "     </form> \n"
 				+ "     </div>\n"
-				
-				+ "      <p> Course Added!</p>\n"
-				
 				+ "    <div style=\"display:inline-block\">\n"
 				+ "    <h1>Drop Course</h1>\n"
 				+ "    <form action=\"drop\">\n"
@@ -110,6 +107,7 @@ public class EnrollServlet extends HttpServlet {
 				+ "      </form>\n"
 				+ "      </div>\n"
 				
+				+ "      <p> Course Added!</p>\n"
 				+ schedule
 				
 				+ "  </section>\n"
@@ -168,9 +166,6 @@ public class EnrollServlet extends HttpServlet {
 				+ "        <input type=\"submit\" value=\"Submit\">\n"
 				+ "      </form> \n"
 				+ "    </div>\n"
-				
-				+"     <p> Failed to add course. Please check your inputs and try again!</p>\n"
-				
 				+ "    <div style=\"display:inline-block\">\n"
 				+ "    <h1>Drop Course</h1>\n"
 				+ "    <form action=\"drop\">\n"
@@ -183,6 +178,9 @@ public class EnrollServlet extends HttpServlet {
 				+ "        <input type=\"submit\" value=\"Submit\">\n"
 				+ "      </form>\n"
 				+ "      </div>\n"
+				
+				+"     <p> Failed to add course. Please check your inputs and try again!</p>\n"
+				
 				+ "  </section>\n"
 				+ "</body>\n"
 				+ "</html>";
