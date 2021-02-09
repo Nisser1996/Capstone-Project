@@ -38,6 +38,8 @@ public class databaseController {
 		
 	}
 	
+	// Retrieves a list of course IDs to use for acquiring a student's schedule.
+	// OPTIMIZATION NOTE: This can be combined with the getStudentSchedule method. Combine queries.
 	public Vector<String> getStudentCourses(int studentID) throws SQLException {
 		Vector<String> courseList = new Vector<String>();	
 		try {
@@ -62,6 +64,7 @@ public class databaseController {
 			
 	}
 	
+	// Gets a student's schedule using a list of course IDs.
 	public Vector<Course> getStudentSchedule(Vector<String> courses) throws SQLException {
 		Vector<Course> courseSchedule = new Vector<Course>();
 		try {
@@ -98,6 +101,8 @@ public class databaseController {
 		return courseSchedule;
 	}
 	
+	//Gets a list of student ids associated with a course for acquiring the names of students in a given class.
+	//OPTIMIZATION NOTE: This can be combined with getStudentsInClasses method. Combine queries.
 	public Vector<Integer> getStudentIDsInClass(String courseID) throws SQLException {
 		Vector<Integer> studentIDs = new Vector<Integer>();
 		
@@ -122,6 +127,7 @@ public class databaseController {
 		return studentIDs;
 	}
 	
+	// Gets a list of students names in a given class based on their ids
 	public Vector<String> getStudentsInClass(Vector<Integer> studentIDs) throws SQLException{
 		Vector<String> studentList = new Vector<String>();
 		
