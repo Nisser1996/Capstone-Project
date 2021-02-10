@@ -23,9 +23,9 @@ public class databaseController {
 	ResultSet rs;
 	
 	// We are currently using a server hosted by Ryan for our database.
-	String dbUser = "hayley";
-	String dbPassword = "hayley";
-	String url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
+	private String dbUser = "hayley";
+	private String dbPassword = "hayley";
+	private String url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
 	
 	//Initializer
 	public databaseController() {
