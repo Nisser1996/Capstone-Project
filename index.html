@@ -13,15 +13,15 @@
 </head>
 <body>
   <!--Navigation Bar-->
-  <section id="title">
-    <nav class="navbar navbar-expand-lg navbar-light bg-danger">
-      <a class="navbar-brand" href="#"><img src="images/iAcademic.ico" height="35" width="35"></a>
+  <section id="nav">
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <a class="navbar-brand" href="index.html"><img src="images/iAcademic.ico" height="35" width="35"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item active"><a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a></li>
+          <li class="nav-item active"><a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a></li>
           <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose platform</a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
               <a class="dropdown-item" href="pages/student.html">Student</a>
@@ -29,19 +29,45 @@
               <a class="dropdown-item" href="pages/staff.html">Staff</a>
             </div>
           </li>
+          <li class="nav-item"><a class="nav-link" href="pages/login.html">Login<span class="sr-only"></span></a></li>
         </ul>
       </div>
     </nav>
+    <br>
+  </section>
+  <section id="title">
+    <div class="container-fluid" style="text-align: center">
+    <h1>Welcome to iAcademic</h1><br>
 
-  <div>
-    <h1>Welcome to iAcademic</h1>
-    <button type="button" ><a href="pages/student.html">Student</a></button>
-    <button type="button"><a href="pages/faculty.html">Faculty</a></button>
-    <button type="button"><a href="pages/staff.html">Staff</a></button>
-  </div>
+    <h4>Are you a ... ?</h4><br>
+    <a href="pages/student.html" class="btn btn-light btn-lg active" role="button" aria-pressed="true">Student</a>
+    <a href="pages/faculty.html" class="btn btn-light btn-lg active" role="button" aria-pressed="true">Faculty</a>
+    <a href="pages/staff.html" class="btn btn-light btn-lg active" role="button" aria-pressed="true">Staff</a>
+    </div>
   </section>
   <section id="features">
-
+    <div class="center-image" >
+      <h1 style="text-align: center;">Services</h1>
+    <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-interval="10000">
+          <img src="images/schedule.png" style="width:600px;height:600px;" alt="class schedule image">
+        </div>
+        <div class="carousel-item" data-interval="2000">
+          <img src="images/gpa.png" style="width:600px;height:600px;" alt="gpa calculator image">
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    </div>
+    
   </section>
 </body>
 </html>
