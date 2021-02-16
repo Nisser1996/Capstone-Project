@@ -11,16 +11,7 @@ import static java.lang.Integer.parseInt;
 
 public class AuthenticationManager {
     databaseController dbc;
-    // test function to ensure everything functions as intended
-    public static void main(String[] args) {
-        databaseController cont = new databaseController();
-        AuthenticationManager PM = new AuthenticationManager(cont);
-        byte[] salt = getSalt();
-        String password = getSecurePassword("Password", salt);
 
-        RegistrationData data = PM.registerStudent("John", "Smith");
-        boolean login =  PM.login(data.userID, data.tempPW);
-    }
     // requires an existing database controller
     public AuthenticationManager(databaseController dbc) {
         this.dbc = dbc;
