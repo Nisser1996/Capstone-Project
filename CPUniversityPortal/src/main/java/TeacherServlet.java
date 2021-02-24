@@ -24,22 +24,13 @@ public class TeacherServlet extends HttpServlet {
       throws IOException {
 
 	String temp = request.getParameter("teacherID");
-	int teacherID = Integer.parseInt(temp);
-	
-	String teacherName = "";
+	String teacherID = String.format("%05d", Integer.parseInt(temp));
+
 	Vector<Course> instructorSchedule = new Vector<Course>();
 	
 	try {
-		teacherName = dbController.getInstructorName(teacherID);
+		instructorSchedule = dbController.getCoursesByInstructor(teacherID);
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
-	try {
-		instructorSchedule = dbController.getCoursesByInstructor(teacherName);
-	} catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
 	

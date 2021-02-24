@@ -11,81 +11,96 @@ import java.util.Vector;
 
 /******************************************************************************************
  *
- * @author Hayley Carter
+ * @author Hayley Carter, Ryan Perkins
  *
- * Database Controller class. The database queries and connections are all handled here.
+ * Database Controller class. The database queries and connections are all handled here, 
+ * including authentication.
  *
  */
 
 public class databaseController {
-    Connection con;
+    // All connection objects for database interactions
+	Connection con;
     Statement statement;
     PreparedStatement pStatement;
     ResultSet rs;
+    
+    // Database connection details. Set based on whether this is the dev environment or not
+    private String dbUser;
+    private String dbPassword;
+    private String url;
 
-    // We are currently using a server hosted by Ryan for our database.
-    private String dbUser = "hayley";
-    private String dbPassword = "hayley";
-    private String url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
-
-    //Initializer
-    public databaseController() {
+    // Initializer. Defaults to using the Google SQL database.
+    public databaseController(){
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+            
+        dbUser = "root";
+        dbPassword = "Ladidadida";
+        url = "jdbc:mysql://34.106.119.236:3306/cpDatabase";
+            
+    }
+    
+    // if we give the database controller an integer, it will establish the connection variables for the dev server.
+    public databaseController(int x) {
+    	try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	dbUser = "hayley";
+    	dbPassword = "hayley";
+    	url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
+    	
+    	
     }
 
-    // Retrieves a list of course IDs to use for acquiring a student's schedule.
-    // OPTIMIZATION NOTE: This can be combined with the getStudentSchedule method. Combine queries.
-    public Vector<String> getStudentCourses(int studentID) throws SQLException {
+    /***************************************************************************************************************************
+     * METHOD: getStudentSchedule
+     * 
+     * Given a student ID, this method will return the student's course schedule.
+     * 
+     * @param String studentID
+     * @return Vector<Course> courseSchedule
+     * @throws SQLException
+     */
+    public Vector<Course> getStudentSchedule(String studentID) throws SQLException {
         Vector<String> courseList = new Vector<String>();
+        Vector<Course> courseSchedule = new Vector<Course>();
+        
         try {
+        	// Set up the connections and execute the first query
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             statement = con.createStatement();
             rs = statement.executeQuery("SELECT course_id FROM studentsInCourses WHERE student_id = " + studentID);
-
+            
+            // Put the courseIDs into a vector to use for displaying a schedule
             while (rs.next()) {
                 courseList.add(rs.getString("course_id"));
             }
-
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            con.close();
-            statement.close();
-            rs.close();
-        }
-        return courseList;
-
-    }
-
-    // Gets a student's schedule using a list of course IDs.
-    public Vector<Course> getStudentSchedule(Vector<String> courses) throws SQLException {
-        Vector<Course> courseSchedule = new Vector<Course>();
-        try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-
-
-            for (int i = 0; i < courses.size(); i++) {
-                String temp = "\"" + courses.elementAt(i) + "\"";
+            
+            // Get the information for each course in the vector from above and return a vectors of Courses
+            for (int i = 0; i < courseList.size(); i++) {
+                String temp = "\"" + courseList.elementAt(i) + "\"";
                 String query = "SELECT * FROM courses WHERE course_id = " + temp;
                 rs = statement.executeQuery(query);
                 while (rs.next()) {
                     String courseID = rs.getString(1);
-                    String courseTitle = rs.getString(2);
-                    String courseMajor = rs.getString(3);
-                    String courseInstructor = rs.getString(4);
+                    String title = rs.getString(2);
+                    String major = rs.getString(3);
+                    String instructorID = String.format("%010d", rs.getInt(4));
+                    String instructor = getInstructorName(instructorID);
                     Time startTime = rs.getTime(5);
                     Time endTime = rs.getTime(6);
                     String quarterOffered = rs.getString(7);
                     int yearOffered = rs.getInt(8);
 
-                    Course course = new Course(courseID, courseTitle, courseMajor, courseInstructor, startTime, endTime, quarterOffered, yearOffered);
+                    Course course = new Course(courseID, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
                     courseSchedule.add(course);
                 }
             }
@@ -93,15 +108,27 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-
+            con.close();
+            statement.close();
+            rs.close();
         }
+        
         return courseSchedule;
     }
 
-    //Gets a list of student ids associated with a course for acquiring the names of students in a given class.
-    //OPTIMIZATION NOTE: This can be combined with getStudentsInClasses method. Combine queries.
-    public Vector<Integer> getStudentIDsInClass(String courseID) throws SQLException {
-        Vector<Integer> studentIDs = new Vector<Integer>();
+
+	/***************************************************************************************************************************
+	 * METHOD: getStudentsInCourses
+	 * 
+	 * Given a courseID, this method will return a list of the students taking that course.
+	 * 
+	 * @param String courseID
+	 * @return Vector<String> studentList
+	 * @throws SQLException
+	 */
+    public Vector<String> getStudentsInCourses(String courseID) throws SQLException {
+        Vector<String> studentIDs = new Vector<String>();
+        Vector<String> studentList = new Vector<String>();
 
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
@@ -109,32 +136,19 @@ public class databaseController {
             rs = statement.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
 
             while (rs.next()) {
-                studentIDs.add(rs.getInt("student_id"));
+                studentIDs.add(String.format("%05d", rs.getInt("student_id")));
             }
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            con.close();
-            statement.close();
-            rs.close();
-        }
-
-        return studentIDs;
-    }
-
-    // Gets a list of students names in a given class based on their ids
-    public Vector<String> getStudentsInClass(Vector<Integer> studentIDs) throws SQLException {
-        Vector<String> studentList = new Vector<String>();
-
-        try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-
+            
             for (int i = 0; i < studentIDs.size(); i++) {
-                rs = statement.executeQuery("SELECT student_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
+                rs = statement.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
 
                 while (rs.next()) {
-                    studentList.add(rs.getString(1));
+                	// converted to full name for display purposes. May change to first and last so that sorting by first or last name can be done.
+                	String fullName = rs.getString(1);
+                	fullName += " ";
+                	fullName+= rs.getString(2);
+                	
+                    studentList.add(fullName);
                 }
             }
         } catch (SQLException e) {
@@ -144,10 +158,94 @@ public class databaseController {
             statement.close();
             rs.close();
         }
+
         return studentList;
     }
+    
+    /***************************************************************************************************************************
+     * METHOD: getCoursesByInstructor
+     * 
+     * Given an instructorID, this method returns a list of courses that instructor teaches.
+     * 
+     * @param String instructorID
+     * @return Vector<Course> instructorSchedule
+     * @throws SQLException
+     */
+    public Vector<Course> getCoursesByInstructor(String instructorID) throws SQLException {
+        Vector<Course> instructorSchedule = new Vector<Course>();
 
-    public Boolean addCourse(int studentID, String courseID) throws SQLException {
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            statement = con.createStatement();
+            rs = statement.executeQuery("SELECT * FROM courses WHERE instructor_id = " + instructorID);
+
+            while (rs.next()) {
+                String courseID = rs.getString(1);
+                String title = rs.getString(2);
+                String major = rs.getString(3);
+                String instructor = getInstructorName(instructorID);
+                Time startTime = rs.getTime(5);
+                Time endTime = rs.getTime(6);
+                String quarterOffered = rs.getString(7);
+                int yearOffered = rs.getInt(8);
+
+                Course course = new Course(courseID, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
+                instructorSchedule.add(course);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+            statement.close();
+            rs.close();
+        }
+
+        return instructorSchedule;
+    }
+    
+    /***************************************************************************************************************************
+     * METHOD: getInstructorName
+     * 
+     * Given an instructorID, this method will return that instructor's full name.
+     * 
+     * @param String instructorID
+     * @return String instructorName
+     * @throws SQLException
+     */
+    public String getInstructorName(String instructorID) throws SQLException {
+        String instructorName = "";
+
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            statement = con.createStatement();
+            rs = statement.executeQuery("SELECT first_name, last_name FROM instructors WHERE instructor_id = " + instructorID);
+
+            while (rs.next()) {
+                instructorName = rs.getString(1);
+                instructorName += " ";
+                instructorName += rs.getString(2);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+            statement.close();
+            rs.close();
+        }
+
+        return instructorName;
+    }
+    /***************************************************************************************************************************
+     * METHOD: addCourse
+     * 
+     * Given a studentID and a courseID, adds that course to that student's schedule.
+     * 
+     * @param String studentID
+     * @param String courseID
+     * @return true if the course was added, false if not
+     * @throws SQLException
+     */
+    public Boolean addCourse(String studentID, String courseID) throws SQLException {
         // First, validate the inputs.
         if (!validateStudent(studentID)) {
             System.out.println("invalid student id");
@@ -163,7 +261,7 @@ public class databaseController {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             pStatement = con.prepareStatement("INSERT INTO studentsInCourses (course_id, student_id) VALUES (?, ?)");
             pStatement.setString(1, courseID);
-            pStatement.setInt(2, studentID);
+            pStatement.setInt(2, Integer.parseInt(studentID));
             pStatement.executeUpdate();
         } catch (SQLException e) {
             throw e;
@@ -175,8 +273,18 @@ public class databaseController {
 
         return true;
     }
-
-    public Boolean removeCourse(int studentID, String courseID) throws SQLException {
+    
+    /***************************************************************************************************************************
+     * METHOD: dropCourse
+     * 
+     * Given a studentID and a courseID, drops that course from that student's schedule.
+     * 
+     * @param String studentID
+     * @param String courseID
+     * @return true if the course was dropped, false if not
+     * @throws SQLException
+     */
+    public Boolean dropCourse(String studentID, String courseID) throws SQLException {
         // First, validate the inputs.
         if (!validateStudent(studentID)) {
             System.out.println("invalid student id");
@@ -192,7 +300,7 @@ public class databaseController {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             pStatement = con.prepareStatement("DELETE FROM studentsInCourses WHERE course_id = ? AND student_id = ?");
             pStatement.setString(1, courseID);
-            pStatement.setInt(2, studentID);
+            pStatement.setInt(2, Integer.parseInt(studentID));
             pStatement.executeUpdate();
         } catch (SQLException e) {
             throw e;
@@ -204,31 +312,21 @@ public class databaseController {
 
         return true;
     }
-
-    public Boolean validateStudent(int studentID) throws SQLException {
-        try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT student_name FROM students WHERE student_id = " + studentID);
-
-            if (!rs.next()) return false;
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            con.close();
-            statement.close();
-            rs.close();
-        }
-
-        return true;
-
-    }
-
+    
+    /***************************************************************************************************************************
+     * METHOD: validateCourse
+     * 
+     * Given a courseID, checks if that course is in the system.
+     * 
+     * @param String courseID
+     * @return true if the course exists, false if not
+     * @throws SQLException
+     */
     public Boolean validateCourse(String courseID) throws SQLException {
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             statement = con.createStatement();
-            rs = statement.executeQuery("SELECT course_title FROM courses WHERE course_id = \"" + courseID + "\"");
+            rs = statement.executeQuery("SELECT title FROM courses WHERE course_id = \"" + courseID + "\"");
 
             if (!rs.next()) return false;
         } catch (SQLException e) {
@@ -240,20 +338,16 @@ public class databaseController {
         }
 
         return true;
-
     }
-
-    public String getInstructorName(int instructorID) throws SQLException {
-        String result = "";
-
+    
+    // Checks if a student is in the system. May be unnecessary, will have to double check authentication functions
+    public Boolean validateStudent(String studentID) throws SQLException {
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             statement = con.createStatement();
-            rs = statement.executeQuery("SELECT instructor_name FROM instructors WHERE instructor_id = " + instructorID);
+            rs = statement.executeQuery("SELECT * FROM students WHERE student_id = " + studentID);
 
-            while (rs.next()) {
-                result = rs.getString(1);
-            }
+            if (!rs.next()) return false;
         } catch (SQLException e) {
             throw e;
         } finally {
@@ -262,39 +356,7 @@ public class databaseController {
             rs.close();
         }
 
-        return result;
-    }
-
-    public Vector<Course> getCoursesByInstructor(String instructorName) throws SQLException {
-        Vector<Course> instructorSchedule = new Vector<Course>();
-
-        try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT * FROM courses WHERE course_instructor = \"" + instructorName + "\"");
-
-            while (rs.next()) {
-                String courseID = rs.getString(1);
-                String courseTitle = rs.getString(2);
-                String courseMajor = rs.getString(3);
-                String courseInstructor = rs.getString(4);
-                Time startTime = rs.getTime(5);
-                Time endTime = rs.getTime(6);
-                String quarterOffered = rs.getString(7);
-                int yearOffered = rs.getInt(8);
-
-                Course course = new Course(courseID, courseTitle, courseMajor, courseInstructor, startTime, endTime, quarterOffered, yearOffered);
-                instructorSchedule.add(course);
-            }
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            con.close();
-            statement.close();
-            rs.close();
-        }
-
-        return instructorSchedule;
+        return true;
 
     }
 

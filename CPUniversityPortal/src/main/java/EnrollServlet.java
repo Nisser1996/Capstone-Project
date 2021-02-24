@@ -23,24 +23,24 @@ public class EnrollServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
 	String temp = request.getParameter("studentID");
-	int studentID = Integer.parseInt(temp);
+	String studentID = String.format("%010d", Integer.parseInt(temp));
 	String courseID = request.getParameter("courseID");
 	
 	Boolean success = true;
 	Vector<Course> courseSchedule = new Vector<Course>();
 	
 	System.out.println("The student id is " + studentID + ", and the course id is " + courseID + ".");
+	
 	try {
 		success = dbController.addCourse(studentID, courseID);
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	
 	if (success) {
 		try {
-			courseSchedule = dbController.getStudentSchedule(dbController.getStudentCourses(studentID));
+			courseSchedule = dbController.getStudentSchedule(studentID);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String schedule = "<h2>Your Current Course Schedule</h2>\n";
