@@ -17,7 +17,7 @@ import java.util.Vector;
     urlPatterns = {"/enroll"}
 )
 public class EnrollServlet extends HttpServlet {
-	databaseController dbController = new databaseController();
+	databaseController dbc = new databaseController();
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -32,14 +32,14 @@ public class EnrollServlet extends HttpServlet {
 	System.out.println("The student id is " + studentID + ", and the course id is " + courseID + ".");
 	
 	try {
-		success = dbController.addCourse(studentID, courseID);
+		success = dbc.addCourse(studentID, courseID);
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
 	
 	if (success) {
 		try {
-			courseSchedule = dbController.getStudentSchedule(studentID);
+			courseSchedule = dbc.getStudentSchedule(studentID);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

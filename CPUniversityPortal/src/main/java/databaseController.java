@@ -20,9 +20,9 @@ import java.util.Vector;
 
 public class databaseController {
     // All connection objects for database interactions
-	Connection con;
-    Statement statement;
-    PreparedStatement pStatement;
+	Connection conn;
+    Statement stmt;
+    PreparedStatement pStmt;
     ResultSet rs;
     
     // Database connection details. Set based on whether this is the dev environment or not
@@ -49,7 +49,6 @@ public class databaseController {
     	try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     	
@@ -75,9 +74,9 @@ public class databaseController {
         
         try {
         	// Set up the connections and execute the first query
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT course_id FROM studentsInCourses WHERE student_id = " + studentID);
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT course_id FROM studentsInCourses WHERE student_id = " + studentID);
             
             // Put the courseIDs into a vector to use for displaying a schedule
             while (rs.next()) {
@@ -88,7 +87,7 @@ public class databaseController {
             for (int i = 0; i < courseList.size(); i++) {
                 String temp = "\"" + courseList.elementAt(i) + "\"";
                 String query = "SELECT * FROM courses WHERE course_id = " + temp;
-                rs = statement.executeQuery(query);
+                rs = stmt.executeQuery(query);
                 while (rs.next()) {
                     String courseID = rs.getString(1);
                     String title = rs.getString(2);
@@ -108,8 +107,8 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
         
@@ -131,16 +130,16 @@ public class databaseController {
         Vector<String> studentList = new Vector<String>();
 
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
 
             while (rs.next()) {
                 studentIDs.add(String.format("%05d", rs.getInt("student_id")));
             }
             
             for (int i = 0; i < studentIDs.size(); i++) {
-                rs = statement.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
+                rs = stmt.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
 
                 while (rs.next()) {
                 	// converted to full name for display purposes. May change to first and last so that sorting by first or last name can be done.
@@ -154,8 +153,8 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
 
@@ -175,9 +174,9 @@ public class databaseController {
         Vector<Course> instructorSchedule = new Vector<Course>();
 
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT * FROM courses WHERE instructor_id = " + instructorID);
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM courses WHERE instructor_id = " + instructorID);
 
             while (rs.next()) {
                 String courseID = rs.getString(1);
@@ -195,8 +194,8 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
 
@@ -216,9 +215,9 @@ public class databaseController {
         String instructorName = "";
 
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT first_name, last_name FROM instructors WHERE instructor_id = " + instructorID);
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT first_name, last_name FROM instructors WHERE instructor_id = " + instructorID);
 
             while (rs.next()) {
                 instructorName = rs.getString(1);
@@ -228,8 +227,8 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
 
@@ -258,16 +257,16 @@ public class databaseController {
 
         //If the inputs are valid, we can perform the add course operation.
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            pStatement = con.prepareStatement("INSERT INTO studentsInCourses (course_id, student_id) VALUES (?, ?)");
-            pStatement.setString(1, courseID);
-            pStatement.setInt(2, Integer.parseInt(studentID));
-            pStatement.executeUpdate();
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            pStmt = conn.prepareStatement("INSERT INTO studentsInCourses (course_id, student_id) VALUES (?, ?)");
+            pStmt.setString(1, courseID);
+            pStmt.setInt(2, Integer.parseInt(studentID));
+            pStmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            pStatement.close();
+            conn.close();
+            pStmt.close();
             rs.close();
         }
 
@@ -297,16 +296,16 @@ public class databaseController {
 
         //If the inputs are valid, we can perform the add course operation.
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            pStatement = con.prepareStatement("DELETE FROM studentsInCourses WHERE course_id = ? AND student_id = ?");
-            pStatement.setString(1, courseID);
-            pStatement.setInt(2, Integer.parseInt(studentID));
-            pStatement.executeUpdate();
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            pStmt = conn.prepareStatement("DELETE FROM studentsInCourses WHERE course_id = ? AND student_id = ?");
+            pStmt.setString(1, courseID);
+            pStmt.setInt(2, Integer.parseInt(studentID));
+            pStmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            pStatement.close();
+            conn.close();
+            pStmt.close();
             rs.close();
         }
 
@@ -324,16 +323,16 @@ public class databaseController {
      */
     public Boolean validateCourse(String courseID) throws SQLException {
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT title FROM courses WHERE course_id = \"" + courseID + "\"");
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT title FROM courses WHERE course_id = \"" + courseID + "\"");
 
             if (!rs.next()) return false;
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
 
@@ -343,16 +342,16 @@ public class databaseController {
     // Checks if a student is in the system. May be unnecessary, will have to double check authentication functions
     public Boolean validateStudent(String studentID) throws SQLException {
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT * FROM students WHERE student_id = " + studentID);
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM students WHERE student_id = " + studentID);
 
             if (!rs.next()) return false;
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
 
@@ -363,9 +362,9 @@ public class databaseController {
     public LoginData getLoginData(String UserID) throws SQLException {
         LoginData data = new LoginData();
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            rs = statement.executeQuery("SELECT * FROM login WHERE userid = \"" + UserID + "\"");
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM login WHERE userid = \"" + UserID + "\"");
 
             while (rs.next()) {
                 data.userID = rs.getString(1);
@@ -375,12 +374,12 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
         if (!data.userID.equals(UserID)) {
-            // User recieved an incorrect user record, abort and return null
+            // User received an incorrect user record, abort and return null
             // this *should* never happen
             return null;
         }
@@ -393,20 +392,20 @@ public class databaseController {
         data.hash = hash;
         data.salt = salt;
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-            int ret = statement.executeUpdate("INSERT INTO login (hash, salt) values (\"" + hash + "\", 0x" + data.getSaltAsHex() + ")");
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            int ret = stmt.executeUpdate("INSERT INTO login (hash, salt) values (\"" + hash + "\", 0x" + data.getSaltAsHex() + ")");
             if (ret != 1)
                 return null;
-            rs = statement.executeQuery("SELECT userid FROM login WHERE hash=\"" + hash + "\" AND salt = 0x" + data.getSaltAsHex() + "");
+            rs = stmt.executeQuery("SELECT userid FROM login WHERE hash=\"" + hash + "\" AND salt = 0x" + data.getSaltAsHex() + "");
             while (rs.next()) {
                 data.userID = String.format("%05d", rs.getInt(1));
             }
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
         return data.userID;
@@ -414,10 +413,10 @@ public class databaseController {
 
     public boolean addNewStudent(String studentID, String firstName, String lastName) throws SQLException{
         try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
             // check if the user exists in the login field
-            rs = statement.executeQuery("SELECT COUNT(1) FROM login WHERE userid=\"" + studentID + "\"");
+            rs = stmt.executeQuery("SELECT COUNT(1) FROM login WHERE userid=\"" + studentID + "\"");
             boolean userExists = false;
             while (rs.next()) {
                 userExists = true;
@@ -425,7 +424,7 @@ public class databaseController {
             if(!userExists)
                 return false;
             // user exists, insert into student table with "undeclared" as major
-            int ret = statement.executeUpdate("INSERT INTO students (student_id, first_name, last_name, major) " +
+            int ret = stmt.executeUpdate("INSERT INTO students (student_id, first_name, last_name, major) " +
                     "values (\"" + studentID + "\", \"" + firstName + "\", \"" + lastName +"\", \"Undeclared\")");
             if (ret != 1)
                 return false;
@@ -433,8 +432,8 @@ public class databaseController {
         } catch (SQLException e) {
             throw e;
         } finally {
-            con.close();
-            statement.close();
+            conn.close();
+            stmt.close();
             rs.close();
         }
         return true;
