@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
     urlPatterns = {"/teacher"}
 )
 public class TeacherServlet extends HttpServlet {
-	databaseController dbController = new databaseController();
+	databaseController dbc = new databaseController();
 
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
@@ -29,7 +29,7 @@ public class TeacherServlet extends HttpServlet {
 	Vector<Course> instructorSchedule = new Vector<Course>();
 	
 	try {
-		instructorSchedule = dbController.getCoursesByInstructor(teacherID);
+		instructorSchedule = dbc.getCoursesByInstructor(teacherID);
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}
