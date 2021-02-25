@@ -35,18 +35,68 @@
     </nav>
   </section>
   <section id="features">
-    <div class="container-fluid">
-      <h1>Class Enrollment</h1>
-    <form action="pages/database.html">
-        <label for="fname">Subject:</label><br>
-        <input type="text" id="subj" name="subj" value="">
-        <p>ex: Computer Science</p>
-        <label for="lname">Course</label><br>
-        <input type="text" id="class" name="class" value="">
-        <p>ex: CS 362</p>
-        <input type="submit" value="Add Class">
-      </form> 
+    <h1 style="margin-left: 2%" class="display-4">Class Enrollment</h1><br>
+
+    <div id="main" class="row">
+      <div style="margin-left: 1%" id="left" class="col-3">
+        <div class="form-group col-md-8">
+          <label for="exampleFormControlSelect1">Choose Term</label>
+          <select class="form-control" id="selectTerm">
+          <option>Fall</option>
+          <option>Winter</option>
+          <option>Spring</option>
+          <option>Summer</option>
+        </select>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="inputZip">Year</label>
+          <input type="text" class="form-control" id="inputYear">
+        </div>
+        <div class="form-group col-md-8">
+          <label for="inputZip">Subject</label>
+          <input type="text" class="form-control" id="subj">
+        </div>
+        <div class="form-group col-md-8">
+          <label for="inputZip">Course</label>
+          <input type="text" class="form-control" id="class">
+        </div>
+        <button style="margin-left: 3%;" id="entry" class="btn btn-secondary" type="submit">Add To Cart</button>
+        </div>
+        <div id="right" class="col-7">
+          <h3>Shopping Cart</h3>
+          <table id="display" class= "table table-hover">
+            <tr>
+                <th>Select</th>
+                <th>Department</th>
+                <th>Course ID</th>
+                <th>Term</th>
+                <!--<th>Course Description</th>
+                <th>Instructor</th>
+                <th>Time</th>
+                <th>Location</th>-->
+            </tr>
+        </table>
+        <button style="margin-left: 1%;" id="enroll" class="btn btn-secondary" type="submit">Enroll</button>
+        </div>
+    </div>
+    <br>
+    <div style="margin-left: 1%;">
+      <h3>Class Schedule</h3>
+      <table id="display" class= "table table-hover">
+      <tr>
+          <th>Select</th>
+          <th>Department</th>
+          <th>Course ID</th>
+          <th>Term</th>
+          <th>Course Description</th>
+          <th>Instructor</th>
+          <th>Time</th>
+          <th>Location</th>
+      </tr>
+  </table>
+  <button id="enroll" class="btn btn-secondary" type="submit">Drop</button>
     </div>
   </section>
+  <script src="../JS/script.js"></script>
 </body>
 </html>

@@ -5,7 +5,7 @@
     background-color: #d9534f;
 }
 #features {
-    background-color: #e3f6f5;
+    background-color: #FAEBD7;
 }
 .container-fluid {
     padding: 3%;
@@ -64,4 +64,10 @@ label {
     padding-top: 40px;
     padding-bottom: 40px;
     background-color: #f5f5f5;
+}
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
 }
