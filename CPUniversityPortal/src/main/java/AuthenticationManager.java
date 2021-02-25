@@ -10,10 +10,10 @@ import static java.lang.Integer.parseInt;
 // logging in, changing passwords, and adding new users to the database
 
 public class AuthenticationManager {
-    databaseController dbc;
+    DatabaseController dbc;
 
     // requires an existing database controller
-    public AuthenticationManager(databaseController dbc) {
+    public AuthenticationManager(DatabaseController dbc) {
         this.dbc = dbc;
     }
 

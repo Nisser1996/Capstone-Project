@@ -9,8 +9,9 @@
   	</include>
   	<include path ="/images/**.ico">
   	</include>
-  	<include path="/**.png"></include>
+  	<include path="/images/**.png"></include>
   	<include path="/CSS/**.css"></include>
+  	<include path="/images/**.gif"></include>
 
   </static-files>	
 

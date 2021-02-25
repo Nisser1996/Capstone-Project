@@ -17,7 +17,7 @@ import java.util.Vector;
     urlPatterns = {"/enroll"}
 )
 public class EnrollServlet extends HttpServlet {
-	databaseController dbc = new databaseController();
+	DatabaseController dbc = new DatabaseController();
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 

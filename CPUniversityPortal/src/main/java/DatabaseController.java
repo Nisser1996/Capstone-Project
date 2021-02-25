@@ -18,7 +18,7 @@ import java.util.Vector;
  *
  */
 
-public class databaseController {
+public class DatabaseController {
     // All connection objects for database interactions
 	Connection conn;
     Statement stmt;
@@ -31,7 +31,7 @@ public class databaseController {
     private String url;
 
     // Initializer. Defaults to using the Google SQL database.
-    public databaseController(){
+    public DatabaseController(){
         try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
@@ -45,7 +45,7 @@ public class databaseController {
     }
     
     // if we give the database controller an integer, it will establish the connection variables for the dev server.
-    public databaseController(int x) {
+    public DatabaseController(int x) {
     	try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {

@@ -18,7 +18,7 @@ import java.util.Vector;
     urlPatterns = {"/drop"}
 )
 public class DropServlet extends HttpServlet {
-	databaseController dbc = new databaseController();
+	DatabaseController dbc = new DatabaseController();
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
