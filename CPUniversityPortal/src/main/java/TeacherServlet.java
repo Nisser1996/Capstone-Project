@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
     urlPatterns = {"/teacher"}
 )
 public class TeacherServlet extends HttpServlet {
-	DatabaseController dbc = new DatabaseController();
+	DatabaseController dbc = new DatabaseController(true);
 
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 

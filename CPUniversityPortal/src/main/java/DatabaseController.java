@@ -45,16 +45,23 @@ public class DatabaseController {
     }
     
     // if we give the database controller an integer, it will establish the connection variables for the dev server.
-    public DatabaseController(int x) {
+    public DatabaseController(Boolean isServer) {
     	try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
     	
-    	dbUser = "hayley";
-    	dbPassword = "hayley";
-    	url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
+    	if (isServer) {
+	    	dbUser = "hayley";
+	    	dbPassword = "hayley";
+	    	url = "jdbc:mysql://cscapstone.ddns.net:3306/sys";
+    	}
+    	else {
+	    	dbUser = "root";
+	    	dbPassword = "Ladidadida";
+	    	url = "jdbc:mysql://127.0.0.1:3306/cpTest";
+    	}
     	
     	
     }
