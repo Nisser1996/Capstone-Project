@@ -7,11 +7,12 @@
   <static-files>
   	<include path="/**.html">
   	</include>
-  	<include path ="/images/**.ico">
+  	<include path="/login/**.html"></include><include path ="/images/**.ico">
   	</include>
   	<include path="/images/**.png"></include>
-  	<include path="/CSS/**.css"></include>
-  	<include path="/images/**.gif"></include>
+  	<include path="/images/**.gif"></include><include path="/CSS/**.css"></include>
+  	
+  	
 
   </static-files>	
 
