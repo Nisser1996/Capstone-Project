@@ -1,3 +1,4 @@
+<!--Faculty Home-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,27 +16,32 @@
   <!--Navigation Bar-->
   <section id="nav">
     <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="index.html"><img src="images/iAcademic.ico" height="35" width="35"></a>
+      <a class="navbar-brand" href="/logout"><img src="../images/iAcademic.ico" height="35" width="35"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="faculty.html">Home <span class="sr-only">(current)</span></a></li>
-          <li class="nav-item dropdown active"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Choose platform</a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">Add</a>
-              <a class="dropdown-item" href="#">Drop</a>
-              <a class="dropdown-item" href="#">Finalize Grades</a>
-            </div>
-          </li>
+          <li class="nav-item"><a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Grade Submission<span class="sr-only"></span></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Log Out<span class="sr-only"></span></a></li>
         </ul>
       </div>
     </nav>
   </section>
   <section id="features">
-
+    <div style="margin-left: 1%;">
+      <h2 class="display-4">Class Schedule</h2>
+      <table id="display" class= "table table-hover">
+      <tr>
+          <th>Course ID</th>
+          <th>Term</th>
+          <th>Course Description</th>
+          <th>Time</th>
+          <th>Location</th>
+      </tr>
+  </table>
+    </div>
   </section>
 </body>
 </html>

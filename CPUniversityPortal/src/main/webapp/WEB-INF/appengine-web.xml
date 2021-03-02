@@ -5,14 +5,17 @@
   <sessions-enabled>true</sessions-enabled>
   <runtime>java8</runtime>
   <static-files>
-  	<include path="/**.html">
-  	</include>
-  	<include path="/login/**.html"></include><include path ="/images/**.ico">
-  	</include>
+  	<include path="/**.html"></include>
+  	<include path="/login/**.html"></include>
+  	<include path="/student/**.html"></include>
+ 	<include path="/faculty/**.html"></include>
+  	<include path="/CSS/**.css"></include>
+  	<include path="/JS/**.js"></include>
+  	<include path ="/images/**.ico"></include>
   	<include path="/images/**.png"></include>
-  	<include path="/images/**.gif"></include><include path="/CSS/**.css"></include>
-  	
-  	
+  	<include path="/images/**.gif"></include>
+
+
 
   </static-files>	
 

@@ -47,7 +47,7 @@ public class StudentAuth extends HttpServlet {
 					e.printStackTrace();
 				}
 			
-			response.sendRedirect("/student.html");
+			response.sendRedirect("student/home.html");
 		}
 		else {
 			System.out.println("Failure!");

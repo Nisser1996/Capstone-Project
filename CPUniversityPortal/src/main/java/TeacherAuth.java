@@ -43,7 +43,7 @@ public class TeacherAuth extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			response.sendRedirect("/faculty.html");
+			response.sendRedirect("faculty/home.html");
 		}
 		else {
 			System.out.println("Failure!");
