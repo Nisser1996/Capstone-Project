@@ -1,0 +1,64 @@
+Steps:
+
+1. line 226 and 142 in your dbcontroller class was using student_name columns in this query :
+
+OLD
+====
+rs = statement.executeQuery("SELECT student_name FROM students WHERE student_id = " + studentID);
+rs = statement.executeQuery("SELECT student_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
+
+NEW
+====
+rs = statement.executeQuery("SELECT first_name FROM students WHERE student_id = " + studentID);
+rs = statement.executeQuery("SELECT first_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
+
+
+Your database has no such column, so, I have changed above lines to first_name.
+
+
+2. line 246 , there was not course_title coulumn as well, I have changed it to title
+
+OLD
+====
+rs = statement.executeQuery("SELECT course_title FROM courses WHERE course_id = \"" + courseID + "\"");
+
+NEW
+====
+rs = statement.executeQuery("SELECT title FROM courses WHERE course_id = \"" + courseID + "\"");
+
+3. 
+
+line 268 , there was not instructor_name coulumn as well, I have changed it to first_name
+
+OLD
+====
+rs = statement.executeQuery("SELECT instructor_name FROM instructors WHERE instructor_id = " + instructorID);
+
+NEW
+====
+rs = statement.executeQuery("SELECT first_name FROM instructors WHERE instructor_id = " + instructorID);
+
+
+4. getCoursesByInstructor -method was using instructor_name, but db had instructor id. I have changed it as well (line 286-292)
+
+OLD===
+	public Vector<Course> getCoursesByInstructor(String instructorName) throws SQLException {
+		Vector<Course> instructorSchedule = new Vector<Course>();
+		
+		try {
+			con = DriverManager.getConnection(url, dbUser, dbPassword);
+			statement = con.createStatement();
+			rs = statement.executeQuery("SELECT * FROM courses WHERE course_instructor = \"" + instructorName + "\"");
+			
+			
+			
+NEW===
+public Vector<Course> getCoursesByInstructor(int instructorId) throws SQLException {
+		Vector<Course> instructorSchedule = new Vector<Course>();
+		
+		try {
+			con = DriverManager.getConnection(url, dbUser, dbPassword);
+			statement = con.createStatement();
+			rs = statement.executeQuery("SELECT * FROM courses WHERE instructor_id = \"" + instructorId + "\"");
+		
+
