@@ -43,11 +43,11 @@ public class TeacherAuth extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			RequestDispatcher view = request.getRequestDispatcher("/faculty.html");
-			view.forward(request, response);
+			response.sendRedirect("/faculty.html");
 		}
 		else {
-			//error needs to happen here
+			System.out.println("Failure!");
+			response.sendRedirect("login/faculty.html");
 		}
 	}
 
