@@ -25,6 +25,8 @@ public class LogoutServlet extends HttpServlet {
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
+	
+		request.getSession().removeAttribute("User");
 		RequestDispatcher view = request.getRequestDispatcher("/index.html");
 		
 		view.forward(request, response);

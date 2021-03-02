@@ -100,7 +100,8 @@ public class DatabaseController {
                     String title = rs.getString(2);
                     String major = rs.getString(3);
                     String instructorID = String.format("%010d", rs.getInt(4));
-                    String instructor = getInstructorName(instructorID);
+                    User user = getInstructor(instructorID);
+                    String instructor = user.firstName + " " + user.lastName;
                     Time startTime = rs.getTime(5);
                     Time endTime = rs.getTime(6);
                     String quarterOffered = rs.getString(7);
@@ -189,7 +190,9 @@ public class DatabaseController {
                 String courseID = rs.getString(1);
                 String title = rs.getString(2);
                 String major = rs.getString(3);
-                String instructor = getInstructorName(instructorID);
+                
+                User user = getInstructor(instructorID);
+                String instructor = user.firstName + " " + user.lastName;
                 Time startTime = rs.getTime(5);
                 Time endTime = rs.getTime(6);
                 String quarterOffered = rs.getString(7);
@@ -209,6 +212,7 @@ public class DatabaseController {
         return instructorSchedule;
     }
     
+    
     /***************************************************************************************************************************
      * METHOD: getInstructorName
      * 
@@ -218,18 +222,18 @@ public class DatabaseController {
      * @return String instructorName
      * @throws SQLException
      */
-    public String getInstructorName(String instructorID) throws SQLException {
-        String instructorName = "";
+    public User getStudent(String studentID) throws SQLException {
+        String firstName = "";
+        String lastName = "";
 
         try {
             conn = DriverManager.getConnection(url, dbUser, dbPassword);
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT first_name, last_name FROM instructors WHERE instructor_id = " + instructorID);
+            rs = stmt.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentID);
 
             while (rs.next()) {
-                instructorName = rs.getString(1);
-                instructorName += " ";
-                instructorName += rs.getString(2);
+                firstName = rs.getString(1);
+                lastName += rs.getString(2);
             }
         } catch (SQLException e) {
             throw e;
@@ -238,8 +242,45 @@ public class DatabaseController {
             stmt.close();
             rs.close();
         }
+        
+        User user = new User(studentID, firstName, lastName);
 
-        return instructorName;
+        return user;
+    }
+    
+    /***************************************************************************************************************************
+     * METHOD: getInstructorName
+     * 
+     * Given an instructorID, this method will return the instructor as a User object.
+     * 
+     * @param String instructorID
+     * @return String instructorName
+     * @throws SQLException
+     */
+    public User getInstructor(String instructorID) throws SQLException {
+        String firstName = "";
+        String lastName = "";
+
+        try {
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT first_name, last_name FROM instructors WHERE instructor_id = " + instructorID);
+
+            while (rs.next()) {
+                firstName = rs.getString(1);
+                lastName += rs.getString(2);
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            stmt.close();
+            rs.close();
+        }
+        
+        
+        User user = new User(instructorID, firstName, lastName);
+        return user;
     }
     /***************************************************************************************************************************
      * METHOD: addCourse
@@ -371,10 +412,10 @@ public class DatabaseController {
         try {
             conn = DriverManager.getConnection(url, dbUser, dbPassword);
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM login WHERE userid = \"" + UserID + "\"");
-
+            rs = stmt.executeQuery("SELECT * FROM login WHERE userid = " + UserID);
+            
             while (rs.next()) {
-                data.userID = rs.getString(1);
+                data.userID =String.format("%010d", Integer.parseInt(rs.getString(1)));
                 data.hash = rs.getString(2);
                 data.salt = rs.getBytes(3);
             }
@@ -385,6 +426,7 @@ public class DatabaseController {
             stmt.close();
             rs.close();
         }
+        
         if (!data.userID.equals(UserID)) {
             // User received an incorrect user record, abort and return null
             // this *should* never happen
