@@ -1,5 +1,9 @@
 <!--Faculty Home-->
-<!DOCTYPE html>
+<%@ page import="java.util.*" %>>
+<%@ page import="com.classes.*" %>>
+
+
+<%String userID = request.getParameter("id");%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -22,7 +26,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
-          <li class="nav-item"><a class="nav-link" href="home.html">Home <span class="sr-only">(current)</span></a></li>
+          <li class="nav-item"><a class="nav-link" href="home.jsp?id=<%=userID%>">Home <span class="sr-only">(current)</span></a></li>
           <li class="nav-item"><a class="nav-link" href="#">Grade Submission<span class="sr-only"></span></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Log Out<span class="sr-only"></span></a></li>
         </ul>
@@ -35,11 +39,31 @@
       <table id="display" class= "table table-hover">
       <tr>
           <th>Course ID</th>
-          <th>Term</th>
-          <th>Course Description</th>
-          <th>Time</th>
-          <th>Location</th>
+          <th>Title</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Quarter</th>
+          <th>Year</th>
       </tr>
+      
+<%
+        DatabaseController dbc = new DatabaseController(true);
+		User user = dbc.getInstructor(userID);
+        Vector<Course> schedule = dbc.getInstructorSchedule(user.userID);
+        for (int i = 0; i < schedule.size(); i++){ 
+%>
+    	<tr>
+    		  <td><%=schedule.elementAt(i).courseID%></td>
+    		  <td><%=schedule.elementAt(i).title%></td>
+    		  <td><%=schedule.elementAt(i).startTime.toString()%></td>
+    		  <td><%=schedule.elementAt(i).endTime.toString()%></td>
+    		  <td><%=schedule.elementAt(i).quarterOffered%></td>
+    		  <td><%=schedule.elementAt(i).yearOffered%></td>
+    	</tr>
+    		  
+<%
+    	  }
+%>
   </table>
     </div>
   </section>

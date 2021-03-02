@@ -1,4 +1,5 @@
-import java.nio.charset.StandardCharsets;
+package com.classes;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
-
 import java.util.Vector;
 
 /******************************************************************************************
@@ -101,7 +101,7 @@ public class DatabaseController {
                     String major = rs.getString(3);
                     String instructorID = String.format("%010d", rs.getInt(4));
                     User user = getInstructor(instructorID);
-                    String instructor = user.firstName + " " + user.lastName;
+                    String instructor = user.name.toString();
                     Time startTime = rs.getTime(5);
                     Time endTime = rs.getTime(6);
                     String quarterOffered = rs.getString(7);
@@ -170,7 +170,7 @@ public class DatabaseController {
     }
     
     /***************************************************************************************************************************
-     * METHOD: getCoursesByInstructor
+     * METHOD: getInstructorSchedule
      * 
      * Given an instructorID, this method returns a list of courses that instructor teaches.
      * 
@@ -178,21 +178,22 @@ public class DatabaseController {
      * @return Vector<Course> instructorSchedule
      * @throws SQLException
      */
-    public Vector<Course> getCoursesByInstructor(String instructorID) throws SQLException {
+    public Vector<Course> getInstructorSchedule(String instructorID) throws SQLException {
         Vector<Course> instructorSchedule = new Vector<Course>();
-
+        User user = getInstructor(instructorID);
+        String instructor = user.name.toString();
         try {
             conn = DriverManager.getConnection(url, dbUser, dbPassword);
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM courses WHERE instructor_id = " + instructorID);
-
+            
+            System.out.println("1");
+            
             while (rs.next()) {
+                System.out.println("in the loop");
                 String courseID = rs.getString(1);
                 String title = rs.getString(2);
                 String major = rs.getString(3);
-                
-                User user = getInstructor(instructorID);
-                String instructor = user.firstName + " " + user.lastName;
                 Time startTime = rs.getTime(5);
                 Time endTime = rs.getTime(6);
                 String quarterOffered = rs.getString(7);
@@ -200,8 +201,9 @@ public class DatabaseController {
 
                 Course course = new Course(courseID, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
                 instructorSchedule.add(course);
-            }
-        } catch (SQLException e) {
+            }   
+        } 
+        catch (SQLException e) {
             throw e;
         } finally {
             conn.close();
@@ -214,12 +216,12 @@ public class DatabaseController {
     
     
     /***************************************************************************************************************************
-     * METHOD: getInstructorName
+     * METHOD: getStudent
      * 
-     * Given an instructorID, this method will return that instructor's full name.
+     * Given a studentID, this method will return the student as a User object
      * 
-     * @param String instructorID
-     * @return String instructorName
+     * @param String studentID
+     * @return User user
      * @throws SQLException
      */
     public User getStudent(String studentID) throws SQLException {
@@ -249,12 +251,12 @@ public class DatabaseController {
     }
     
     /***************************************************************************************************************************
-     * METHOD: getInstructorName
+     * METHOD: getInstructor
      * 
      * Given an instructorID, this method will return the instructor as a User object.
      * 
      * @param String instructorID
-     * @return String instructorName
+     * @return User user
      * @throws SQLException
      */
     public User getInstructor(String instructorID) throws SQLException {

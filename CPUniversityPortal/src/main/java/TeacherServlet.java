@@ -7,6 +7,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.classes.*;
 /******************************************************************************************
  * 
  * @author Hayley Carter
@@ -29,7 +31,7 @@ public class TeacherServlet extends HttpServlet {
 	Vector<Course> instructorSchedule = new Vector<Course>();
 	
 	try {
-		instructorSchedule = dbc.getCoursesByInstructor(teacherID);
+		instructorSchedule = dbc.getInstructorSchedule(teacherID);
 	} catch (SQLException e) {
 		e.printStackTrace();
 	}

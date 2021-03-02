@@ -1,14 +1,14 @@
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Vector;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Vector;
+
+import com.classes.*;
 
 /******************************************************************************************
  * 
@@ -27,27 +27,14 @@ public class StudentAuth extends HttpServlet {
       throws IOException, ServletException {
 		
 		String userID = request.getParameter("sID");
-		if (userID == null) System.out.println("UserID is null");
-			
 		String password = request.getParameter("sPassword");
-		if (password == null) System.out.println("Password is null");
-		
-		System.out.println("Got user and password, time to authenticate!");
 	
 		AuthenticationManager auth = new AuthenticationManager(dbc);
 		Boolean success = auth.login(userID, password);
 		
 		if (success) {
 			System.out.println("Success!");
-			User student;
-				try {
-					student = dbc.getStudent(userID);
-					request.getSession().setAttribute("User", student);
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			
-			response.sendRedirect("student/home.html");
+			response.sendRedirect("student/home.jsp?id=" + userID);
 		}
 		else {
 			System.out.println("Failure!");

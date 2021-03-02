@@ -1,12 +1,14 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Vector;
+
+import com.classes.*;
 /******************************************************************************************
  * 
  * @author Hayley Carter

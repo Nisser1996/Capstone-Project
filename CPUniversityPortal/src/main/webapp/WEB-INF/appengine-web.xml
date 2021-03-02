@@ -9,6 +9,8 @@
   	<include path="/login/**.html"></include>
   	<include path="/student/**.html"></include>
  	<include path="/faculty/**.html"></include>
+ 	<include path="/student/**.jsp"></include>
+ 	<include path="/faculty/**.jsp"></include>
   	<include path="/CSS/**.css"></include>
   	<include path="/JS/**.js"></include>
   	<include path ="/images/**.ico"></include>

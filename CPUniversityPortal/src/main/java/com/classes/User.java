@@ -1,3 +1,5 @@
+package com.classes;
+
 import java.io.Serializable;
 
 /*******************************************************************************************
@@ -8,9 +10,8 @@ import java.io.Serializable;
  * it should contain.
  */
 public class User implements Serializable {
-	String userID;
-	String firstName;
-	String lastName;
+	public String userID;
+	public Name name;
 
 	
 	// Initialize a course object.
@@ -19,19 +20,15 @@ public class User implements Serializable {
 				  String lastName) {
 		
 		this.userID = userID;
-		this.firstName = firstName;
-		this.lastName = lastName;
+		name = new Name(firstName, lastName);
 	}
 	
 	// simple toString method for easier debugging
 	public String toString() {
 		String result = "";
-		
-		result += userID;
-		result += ", ";
-		result += firstName;
-		result += ", ";
-		result += lastName;
+		result += name.first;
+		result += " ";
+		result += name.last;
 		
 		return result;
 	}

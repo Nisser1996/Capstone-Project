@@ -1,3 +1,4 @@
+package com.classes;
 public class LoginData {
     // 10-digit User ID
     // stored as a String because java hates zero-padding
