@@ -25,10 +25,9 @@ public class TeacherAuth extends HttpServlet {
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
-		String temp = request.getParameter("ID");
-		String userID = String.format("%010d", Integer.parseInt(temp));
+		String userID = request.getParameter("tID");
 		
-		String password = request.getParameter("password");
+		String password = request.getParameter("tPassword");
 		
 		
 	

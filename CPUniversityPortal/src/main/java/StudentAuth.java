@@ -47,13 +47,11 @@ public class StudentAuth extends HttpServlet {
 					e.printStackTrace();
 				}
 			
-			RequestDispatcher view = request.getRequestDispatcher("../student.html");
-			view.forward(request, response);
+			response.sendRedirect("student.html");
 		}
 		else {
 			System.out.println("Failure!");
-			RequestDispatcher view = request.getRequestDispatcher("login/student.html");
-			view.forward(request, response);
+			response.sendRedirect("login/student.html");
 		}
 	}
 
