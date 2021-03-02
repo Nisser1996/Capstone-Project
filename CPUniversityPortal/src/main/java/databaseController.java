@@ -306,7 +306,8 @@ public class databaseController {
             rs = statement.executeQuery("SELECT * FROM login WHERE userid = \"" + UserID + "\"");
 
             while (rs.next()) {
-                data.userID = rs.getString(1);
+                int intID = rs.getInt(1);
+                data.userID = String.format("%010d", intID);
                 data.hash = rs.getString(2);
                 data.salt = rs.getBytes(3);
             }
@@ -350,7 +351,44 @@ public class databaseController {
         return data.userID;
     }
 
-    public boolean addNewStudent(String studentID, String firstName, String lastName) throws SQLException{
+
+    // TODO: REMOVE WHEN TEST DATABASE COMPLETE
+    public void CreateLoginsForExistingUsers() throws SQLException{
+        Vector<LoginData> ldVec = new Vector<>();
+
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            statement = con.createStatement();
+
+            rs = statement.executeQuery("SELECT student_id FROM students WHERE students.student_id NOT IN ( SELECT userid FROM login);");
+            while (rs.next()) {
+                LoginData data = new LoginData();
+                data.userID = String.format("%05d", rs.getInt("student_id"));
+                data.salt = AuthenticationManager.getSalt();
+                data.hash = AuthenticationManager.getSecurePassword("password", data.salt);
+                ldVec.add(data);
+            }
+        } catch (SQLException e) {
+            con.close();
+            throw e;
+        } finally {
+            statement.close();
+            rs.close();
+        }
+        String updateString =
+                "INSERT INTO login (userid, hash, salt) values (? , ? , ? )";
+        PreparedStatement addToDatabase = con.prepareStatement(updateString);
+        for(LoginData data : ldVec){
+            addToDatabase.setInt(1, Integer.parseInt(data.userID));
+            addToDatabase.setString(2, data.hash);
+            addToDatabase.setBytes(3, data.salt);
+            addToDatabase.executeUpdate();
+        }
+        con.close();
+
+    }
+
+    public boolean addNewStudent(String studentID, String firstName, String lastName) throws SQLException {
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
             statement = con.createStatement();
@@ -360,11 +398,11 @@ public class databaseController {
             while (rs.next()) {
                 userExists = true;
             }
-            if(!userExists)
+            if (!userExists)
                 return false;
             // user exists, insert into student table with "undeclared" as major
             int ret = statement.executeUpdate("INSERT INTO students (student_id, first_name, last_name, major) " +
-                    "values (\"" + studentID + "\", \"" + firstName + "\", \"" + lastName +"\", \"Undeclared\")");
+                    "values (\"" + studentID + "\", \"" + firstName + "\", \"" + lastName + "\", \"Undeclared\")");
             if (ret != 1)
                 return false;
 

@@ -62,6 +62,23 @@ public class AuthenticationManager {
         return new RegistrationData(UserID, randPassword);
     }
 
+    public boolean addUserForTesting(String UserID) {
+        byte[] salt = getSalt();
+        String hash = getSecurePassword("password", salt);
+        // add new data to login database
+        try {
+            UserID = dbc.addLoginData(hash, salt);
+            // check if user was created
+            if(UserID.equals(""))
+                return false; // user could not be created
+            // user already exists in the student database
+
+        } catch (SQLException e) {
+            // TODO
+        }
+        return true;
+    }
+
     private static String generateRandomPassword() {
         SecureRandom random = new SecureRandom();
         String ret = "";
@@ -76,8 +93,9 @@ public class AuthenticationManager {
         return password.toString();
     }
 
-    // DO NOT ALTER
-    private static String getSecurePassword(String password, byte[] salt) {
+    // TODO: REPLACE WITH PRIVATE WHEN TEST DATABASE COMPLETE
+    // private static String getSecurePassword(String password, byte[] salt) {
+    public static String getSecurePassword(String password, byte[] salt) {
 
         String generatedPassword = null;
         try {
@@ -95,8 +113,9 @@ public class AuthenticationManager {
         return generatedPassword;
     }
 
-    // DO NOT ALTER
-    private static byte[] getSalt() {
+    // TODO: REPLACE WITH PRIVATE WHEN TEST DATABASE COMPLETE
+    // private static byte[] getSalt() {
+    public static byte[] getSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
