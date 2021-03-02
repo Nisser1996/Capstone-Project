@@ -3,7 +3,8 @@
 <%@ page import="com.classes.*" %>>
 
 
-<%String userID = request.getParameter("id");%>
+<%String userID = request.getParameter("id");
+%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -80,6 +81,8 @@
     <br>
     <div style="margin-left: 1%;">
       <h3>Class Schedule</h3>
+      <form action="../drop">
+      <input type="hidden" name="id" value="<%=userID%>">
       <table id="display" class= "table table-hover">
       <tr>
           <th>Course ID</th>
@@ -98,6 +101,7 @@
         for (int i = 0; i < schedule.size(); i++){ 
 %>
     	<tr>
+    		  <td><input id="checkBox" type="checkbox" name="selectedCourses" value="<%=schedule.elementAt(i).courseID%>"></td>
     		  <td><%=schedule.elementAt(i).courseID%></td>
     		  <td><%=schedule.elementAt(i).title%></td>
     		  <td><%=schedule.elementAt(i).instructor%></td>
@@ -111,7 +115,9 @@
     	  }
 %>
   </table>
-    </div>
+  <button id="drop" class="btn btn-secondary" type="submit">Drop</button>
+  </form>
+  </div>
   </section>
   <script src="../JS/script.js"></script>
 </body>
