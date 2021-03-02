@@ -78,6 +78,7 @@ public class DatabaseController {
     public Vector<Course> getStudentSchedule(String studentID) throws SQLException {
         Vector<String> courseList = new Vector<String>();
         Vector<Course> courseSchedule = new Vector<Course>();
+        Vector<String> instructorIDs = new Vector<String>();
         
         try {
         	// Set up the connections and execute the first query
@@ -99,9 +100,7 @@ public class DatabaseController {
                     String courseID = rs.getString(1);
                     String title = rs.getString(2);
                     String major = rs.getString(3);
-                    String instructorID = String.format("%010d", rs.getInt(4));
-                    User user = getInstructor(instructorID);
-                    String instructor = user.name.toString();
+                    String instructor = String.format("%010d", rs.getInt(4));
                     Time startTime = rs.getTime(5);
                     Time endTime = rs.getTime(6);
                     String quarterOffered = rs.getString(7);
@@ -109,7 +108,11 @@ public class DatabaseController {
 
                     Course course = new Course(courseID, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
                     courseSchedule.add(course);
+                    instructorIDs.add(instructor);
                 }
+            }
+            for (int i = 0 ; i < instructorIDs.size(); i++) {
+            	courseSchedule.elementAt(i).instructor = getInstructor(instructorIDs.elementAt(i)).toString();
             }
 
         } catch (SQLException e) {
@@ -187,10 +190,7 @@ public class DatabaseController {
             stmt = conn.createStatement();
             rs = stmt.executeQuery("SELECT * FROM courses WHERE instructor_id = " + instructorID);
             
-            System.out.println("1");
-            
             while (rs.next()) {
-                System.out.println("in the loop");
                 String courseID = rs.getString(1);
                 String title = rs.getString(2);
                 String major = rs.getString(3);
