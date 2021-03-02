@@ -1,3 +1,5 @@
+package com.classes;
+import java.io.Serializable;
 import java.sql.Time;
 
 
@@ -8,15 +10,15 @@ import java.sql.Time;
  * This class functions like a structure. It defines the course object and all the information
  * it should contain.
  */
-public class Course {
-	String courseID;
-	String courseTitle;
-	String courseMajor;
-	String courseInstructor;
-	Time startTime;
-	Time endTime;
-	String quarterOffered;
-	int yearOffered;
+public class Course implements Serializable {
+	public String courseID;
+	public String title;
+	public String major;
+	public String instructor;
+	public Time startTime;
+	public Time endTime;
+	public String quarterOffered;
+	public int yearOffered;
 	
 	// Initialize a course object.
 	public Course(String courseID, 
@@ -29,9 +31,9 @@ public class Course {
 				  int yearOffered) {
 		
 		this.courseID = courseID;
-		this.courseTitle = courseTitle;
-		this.courseMajor = courseMajor;
-		this.courseInstructor = courseInstructor;
+		this.title = courseTitle;
+		this.major = courseMajor;
+		this.instructor = courseInstructor;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.quarterOffered = quarterOffered;
@@ -44,11 +46,11 @@ public class Course {
 		
 		result += courseID;
 		result += ", ";
-		result += courseTitle;
+		result += title;
 		result += ", ";
-		result += courseMajor;
+		result += major;
 		result += ", ";
-		result += courseInstructor;
+		result += instructor;
 		result += ", ";
 		result += startTime.toString();
 		result += ", ";

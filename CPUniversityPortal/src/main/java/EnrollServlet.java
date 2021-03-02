@@ -1,12 +1,14 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Vector;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Vector;
+
+import com.classes.*;
 /******************************************************************************************
  * 
  * @author Hayley Carter
@@ -17,30 +19,30 @@ import java.util.Vector;
     urlPatterns = {"/enroll"}
 )
 public class EnrollServlet extends HttpServlet {
-	databaseController dbController = new databaseController();
+	DatabaseController dbc = new DatabaseController(true);
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
 	String temp = request.getParameter("studentID");
-	int studentID = Integer.parseInt(temp);
+	String studentID = String.format("%010d", Integer.parseInt(temp));
 	String courseID = request.getParameter("courseID");
 	
 	Boolean success = true;
 	Vector<Course> courseSchedule = new Vector<Course>();
 	
 	System.out.println("The student id is " + studentID + ", and the course id is " + courseID + ".");
+	
 	try {
-		success = dbController.addCourse(studentID, courseID);
+		success = dbc.addCourse(studentID, courseID);
 	} catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	
 	if (success) {
 		try {
-			courseSchedule = dbController.getStudentSchedule(dbController.getStudentCourses(studentID));
+			courseSchedule = dbc.getStudentSchedule(studentID);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		String schedule = "<h2>Your Current Course Schedule</h2>\n";
