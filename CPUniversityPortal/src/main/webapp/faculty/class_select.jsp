@@ -45,7 +45,6 @@
       <input type="hidden" name="id" value="<%=userID%>">
       <input type="hidden" name="do" value="<%=action%>">
         <div class="form-group col-md-8">
-          <label for="exampleFormControlSelect1">Choose Term</label>
           <select name="select" class="form-control" id="class">
         <%
         DatabaseController dbc = new DatabaseController(true);

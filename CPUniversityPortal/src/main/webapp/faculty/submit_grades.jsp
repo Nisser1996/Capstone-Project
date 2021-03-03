@@ -5,6 +5,8 @@
 	<%	
 	String userID = request.getParameter("id");
 	String course = request.getParameter("course");
+	
+	course = course.replace('+', ' ');
 	%>
 <html lang="en">
 <head>
@@ -38,5 +40,47 @@
     </nav>
   </section>
   <section id="features">
+	    <div style="margin-left: 1%;">
+      <h2 class="display-4">Students in <%=course%></h2>
+      <form action="/submit_grades">
+      <input type="hidden" name="id" value="<%=userID%>">
+      <input type="hidden" name="course" value="<%=course%>">
+      <table id="display" class= "table table-hover">
+      <tr>
+          <th>Student</th>
+          <th>Grade</th>
+      </tr>
+      
+		<%
+        DatabaseController dbc = new DatabaseController(true);
+		Vector<User> students = dbc.getStudentsInCourse(course);
+        for (int i = 0; i < students.size(); i++){ 
+		%>
+    	<tr>
+    		  <td><%=students.elementAt(i).toString()%></td>
+    		  <td>
+    		  <select name="selectedGrade" class="form_control">
+    		  <option value="A+">A+</option>
+    		  <option value="A">A</option>
+    		  <option value="A-">A-</option>
+    		  <option value="B+">B+</option>
+    		  <option value="B">B</option>
+    		  <option value="B-">B-</option>
+    		  <option value="C+">C+</option>
+    		  <option value="C">C</option>
+    		  <option value="C-">C-</option>
+    		  <option value="D+">D+</option>
+    		  <option value="D">D</option>
+    		  <option value="D-">D-</option>
+    		  <option value="F">F</option>
+    		  </select>
+    		  </td>
+		<%
+    	  }
+		%>
+  	</table>
+  		<button id="drop" class="btn btn-secondary" type="submit">Submit</button>
+		</form>
+    </div>
   </section>
 </body>

@@ -125,48 +125,6 @@ public class DatabaseController {
         
         return courseSchedule;
     }
-
-
-	/***************************************************************************************************************************
-	 * METHOD: getStudentsInCourse
-	 * 
-	 * Given a courseID, this method will return a list of the students taking that course.
-	 * 
-	 * @param String courseID
-	 * @return Vector<String> studentList
-	 * @throws SQLException
-	 */
-    public Vector<User> getStudentsInCourse(String courseID) throws SQLException {
-        Vector<String> studentIDs = new Vector<String>();
-        Vector<User> studentList = new Vector<User>();
-
-        try {
-            conn = DriverManager.getConnection(url, dbUser, dbPassword);
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
-
-            while (rs.next()) {
-                studentIDs.add(String.format("%010d", rs.getInt("student_id")));
-            }
-            
-            for (int i = 0; i < studentIDs.size(); i++) {
-                rs = stmt.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
-
-                while (rs.next()) {
-                	
-                    studentList.add(new User(studentIDs.elementAt(i), rs.getString(1), rs.getString(2)));
-                }
-            }
-        } catch (SQLException e) {
-            throw e;
-        } finally {
-            conn.close();
-            stmt.close();
-            rs.close();
-        }
-
-        return studentList;
-    }
     
     /***************************************************************************************************************************
      * METHOD: getInstructorSchedule
@@ -210,6 +168,46 @@ public class DatabaseController {
         return instructorSchedule;
     }
     
+	/***************************************************************************************************************************
+	 * METHOD: getStudentsInCourse
+	 * 
+	 * Given a courseID, this method will return a list of the students taking that course.
+	 * 
+	 * @param String courseID
+	 * @return Vector<String> studentList
+	 * @throws SQLException
+	 */
+    public Vector<User> getStudentsInCourse(String courseID) throws SQLException {
+        Vector<String> studentIDs = new Vector<String>();
+        Vector<User> studentList = new Vector<User>();
+
+        try {
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
+
+            while (rs.next()) {
+                studentIDs.add(String.format("%010d", rs.getInt("student_id")));
+            }
+            
+            for (int i = 0; i < studentIDs.size(); i++) {
+                rs = stmt.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
+
+                while (rs.next()) {
+                	
+                    studentList.add(new User(studentIDs.elementAt(i), rs.getString(1), rs.getString(2)));
+                }
+            }
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            stmt.close();
+            rs.close();
+        }
+
+        return studentList;
+    }
     
     /***************************************************************************************************************************
      * METHOD: getStudent
@@ -280,6 +278,49 @@ public class DatabaseController {
         User user = new User(instructorID, firstName, lastName);
         return user;
     }
+    
+    /***************************************************************************************************************************
+     * METHOD: getCourse
+     * 
+     * Given an instructorID, this method will return the instructor as a User object.
+     * 
+     * @param String instructorID
+     * @return User user
+     * @throws SQLException
+     */
+    public Course getCourse(String courseID) throws SQLException {
+        Course course = null;
+
+        try {
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM courses WHERE course_id = \"" + courseID + "\"");
+
+            while (rs.next()) {
+                String id = rs.getString(1);
+                String title = rs.getString(2);
+                String major = rs.getString(3);
+                String instructor = String.format("%010d", rs.getInt(4));
+                Time startTime = rs.getTime(5);
+                Time endTime = rs.getTime(6);
+                String quarterOffered = rs.getString(7);
+                int yearOffered = rs.getInt(8);
+
+                course = new Course(id, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
+            }
+            
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            stmt.close();
+            rs.close();
+        }
+        
+
+        return course;
+    }
+    
     /***************************************************************************************************************************
      * METHOD: addCourse
      * 
@@ -346,6 +387,48 @@ public class DatabaseController {
             pStmt = conn.prepareStatement("DELETE FROM studentsInCourses WHERE course_id = ? AND student_id = ?");
             pStmt.setString(1, courseID);
             pStmt.setInt(2, Integer.parseInt(studentID));
+            pStmt.executeUpdate();
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            pStmt.close();
+            rs.close();
+        }
+
+        return true;
+    }
+    
+    /***************************************************************************************************************************
+     * METHOD: addPastCourse
+     * 
+     * Given a studentID and a courseID, adds that course to that student's schedule.
+     * 
+     * @param String studentID
+     * @param String courseID
+     * @return true if the course was added, false if not
+     * @throws SQLException
+     */
+    public Boolean addPastCourse(String studentID, Course course, String grade) throws SQLException {
+        // First, validate the inputs.
+        if (!validateStudent(studentID)) {
+            System.out.println("invalid student id");
+            return false;
+        }
+        if (!validateCourse(course.courseID)) {
+            System.out.println("invalid course id");
+            return false;
+        }
+
+        //If the inputs are valid, we can perform the add course operation.
+        try {
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            pStmt = conn.prepareStatement("INSERT INTO pastCourses (course_id, student_id, grade, quarter_offered, year_offered) VALUES (?, ?, ?, ?, ?)");
+            pStmt.setString(1, course.courseID);
+            pStmt.setInt(2, Integer.parseInt(studentID));
+            pStmt.setString(3, grade);
+            pStmt.setString(4, course.quarterOffered);
+            pStmt.setInt(5, course.yearOffered);
             pStmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
