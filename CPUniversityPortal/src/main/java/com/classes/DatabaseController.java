@@ -128,7 +128,7 @@ public class DatabaseController {
 
 
 	/***************************************************************************************************************************
-	 * METHOD: getStudentsInCourses
+	 * METHOD: getStudentsInCourse
 	 * 
 	 * Given a courseID, this method will return a list of the students taking that course.
 	 * 
@@ -136,9 +136,9 @@ public class DatabaseController {
 	 * @return Vector<String> studentList
 	 * @throws SQLException
 	 */
-    public Vector<String> getStudentsInCourses(String courseID) throws SQLException {
+    public Vector<User> getStudentsInCourse(String courseID) throws SQLException {
         Vector<String> studentIDs = new Vector<String>();
-        Vector<String> studentList = new Vector<String>();
+        Vector<User> studentList = new Vector<User>();
 
         try {
             conn = DriverManager.getConnection(url, dbUser, dbPassword);
@@ -146,19 +146,15 @@ public class DatabaseController {
             rs = stmt.executeQuery("SELECT student_id FROM studentsInCourses WHERE course_id = \"" + courseID + "\"");
 
             while (rs.next()) {
-                studentIDs.add(String.format("%05d", rs.getInt("student_id")));
+                studentIDs.add(String.format("%010d", rs.getInt("student_id")));
             }
             
             for (int i = 0; i < studentIDs.size(); i++) {
                 rs = stmt.executeQuery("SELECT first_name, last_name FROM students WHERE student_id = " + studentIDs.elementAt(i));
 
                 while (rs.next()) {
-                	// converted to full name for display purposes. May change to first and last so that sorting by first or last name can be done.
-                	String fullName = rs.getString(1);
-                	fullName += " ";
-                	fullName+= rs.getString(2);
                 	
-                    studentList.add(fullName);
+                    studentList.add(new User(studentIDs.elementAt(i), rs.getString(1), rs.getString(2)));
                 }
             }
         } catch (SQLException e) {

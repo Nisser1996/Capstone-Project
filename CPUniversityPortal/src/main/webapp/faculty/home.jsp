@@ -27,7 +27,9 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="home.jsp?id=<%=userID%>">Home <span class="sr-only">(current)</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Grade Submission<span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=a">Add Student<span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=d">Drop Student<span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=g">Grade Submission<span class="sr-only"></span></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Log Out<span class="sr-only"></span></a></li>
         </ul>
       </div>
@@ -36,6 +38,7 @@
   <section id="features">
     <div style="margin-left: 1%;">
       <h2 class="display-4">Class Schedule</h2>
+      <input type="hidden" name="id" value="<%=userID%>">
       <table id="display" class= "table table-hover">
       <tr>
           <th>Course ID</th>

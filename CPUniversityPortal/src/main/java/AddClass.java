@@ -15,10 +15,10 @@ import com.classes.*;
  *
  */
 @WebServlet(
-    name = "EnrollServlet",
+    name = "AddClass",
     urlPatterns = {"/enroll"}
 )
-public class EnrollServlet extends HttpServlet {
+public class AddClass extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);
 	
 @Override

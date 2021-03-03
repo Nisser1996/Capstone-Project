@@ -16,10 +16,10 @@ import com.classes.*;
  *
  */
 @WebServlet(
-    name = "DropServlet",
+    name = "DropClass",
     urlPatterns = {"/drop"}
 )
-public class DropServlet extends HttpServlet {
+public class DropClass extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);
 	
 @Override

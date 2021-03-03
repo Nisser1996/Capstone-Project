@@ -16,10 +16,10 @@ import java.util.Vector;
  *
  */
 @WebServlet(
-    name = "LogoutServlet",
-    urlPatterns = {"/logout"}
+    name = "SubmitGrades",
+    urlPatterns = {"/submit_grades"}
 )
-public class LogoutServlet extends HttpServlet {
+public class SubmitGrades extends HttpServlet {
 	// DatabaseController dbc = new DatabaseController();
 	
 @Override
