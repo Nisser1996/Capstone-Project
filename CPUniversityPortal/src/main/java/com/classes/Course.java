@@ -19,6 +19,7 @@ public class Course implements Serializable {
 	public Time endTime;
 	public String quarterOffered;
 	public int yearOffered;
+	public String grade;
 	
 	// Initialize a course object.
 	public Course(String courseID, 
@@ -38,6 +39,13 @@ public class Course implements Serializable {
 		this.endTime = endTime;
 		this.quarterOffered = quarterOffered;
 		this.yearOffered = yearOffered;
+	}
+	
+	public Course (String courseID, String quarterOffered, int yearOffered, String grade) {
+		this.courseID = courseID;
+		this.quarterOffered = quarterOffered;
+		this.yearOffered = yearOffered;
+		this.grade = grade;	
 	}
 	
 	// simple toString method for easier debugging

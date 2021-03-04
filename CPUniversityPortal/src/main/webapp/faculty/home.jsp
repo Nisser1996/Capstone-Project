@@ -1,6 +1,6 @@
 <!--Faculty Home-->
-<%@ page import="java.util.*" %>>
-<%@ page import="com.classes.*" %>>
+<%@ page import="java.util.*" %>
+<%@ page import="com.classes.*" %>
 
 
 <%String userID = request.getParameter("id");%>

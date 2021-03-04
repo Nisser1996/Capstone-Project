@@ -1,6 +1,6 @@
 <!--Student Home-->
-<%@ page import="java.util.*" %>>
-<%@ page import="com.classes.*" %>>
+<%@ page import="java.util.*" %>
+<%@ page import="com.classes.*" %>
 
 
 <%String userID = request.getParameter("id");
@@ -27,7 +27,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="home.jsp?id=<%=userID%>">Home <span class="sr-only">(current)</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Course History <span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="courseHistory.jsp?id=<%=userID%>">Course History <span class="sr-only"></span></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Log Out<span class="sr-only"></span></a></li>
         </ul>
       </div>

@@ -127,6 +127,52 @@ public class DatabaseController {
     }
     
     /***************************************************************************************************************************
+     * METHOD: getStudentHistory
+     * 
+     * Given a student ID, this method will return the student's course history.
+     * 
+     * @param String studentID
+     * @return Vector<Course> courseSchedule
+     * @throws SQLException
+     */
+    public Vector<Course> getStudentHistory(String studentID) throws SQLException {
+        Vector<Course> courseSchedule = new Vector<Course>();
+        
+        try {
+        	// Set up the connections and execute the first query
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery("SELECT * FROM pastCourses WHERE student_id = " + studentID);
+            
+            // Put the courseIDs into a vector to use for displaying a schedule
+            while (rs.next()) {
+                    String courseID = rs.getString(1);
+                    String grade = rs.getString(3);
+                    String quarterOffered = rs.getString(4);
+                    int yearOffered = rs.getInt(5);
+
+                    Course course = new Course(courseID, quarterOffered, yearOffered, grade);
+                    courseSchedule.add(course);
+                
+            	}
+            
+            for (int i = 0 ; i < courseSchedule.size(); i++) {
+            	Course course = getCourse(courseSchedule.elementAt(i).courseID);
+            	courseSchedule.elementAt(i).title = course.title;
+            }
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            stmt.close();
+            rs.close();
+        }
+        
+        return courseSchedule;
+    }
+    
+    /***************************************************************************************************************************
      * METHOD: getInstructorSchedule
      * 
      * Given an instructorID, this method returns a list of courses that instructor teaches.
