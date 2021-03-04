@@ -50,6 +50,8 @@
 <%
         DatabaseController dbc = new DatabaseController(true);
         Vector<Course> schedule = dbc.getStudentHistory(userID);
+        float gpa = 0;
+        int count = 0;
         for (int i = 0; i < schedule.size(); i++){ 
 %>
     	<tr>
@@ -61,10 +63,69 @@
     	</tr>
     		  
 <%
+			switch (schedule.elementAt(i).grade){
+			case "A+":
+				gpa += 4;
+				count++;
+				break;
+			case "A":
+				gpa += 4;
+				count++;
+				break;
+			case "A-":
+				gpa += 3.7;
+				count++;
+				break;
+			case "B+":
+				gpa += 3.3;
+				count++;
+				break;
+			case "B":
+				gpa += 3;
+				count++;
+				break;
+			case "B-":
+				gpa += 2.7;
+				count++;
+				break;
+			case "C+":
+				gpa += 2.3;
+				count++;	
+				break;
+			case "C":
+				gpa += 2.0;
+				count++;
+				break;
+			case "C-":
+				gpa += 1.7;
+				count++;
+				break;
+			case "D+":
+				gpa += 1.3;
+				count++;
+				break;
+			case "D":
+				gpa += 1;
+				count++;
+				break;
+			case "D-":
+				gpa += .7;
+				count++;
+				break;
+			case "F":
+				count++;
+				break;
+			default:
+			}
     	  }
+        
+        gpa = gpa/count;
 %>
   </table>
+  
+  <p>Your GPA is <%=gpa%>.</p>
   </div>
+  
   </section>
   <script src="../JS/script.js"></script>
 </body>
