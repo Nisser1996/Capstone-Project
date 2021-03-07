@@ -15,29 +15,29 @@ import com.classes.*;
  *
  */
 @WebServlet(
-    name = "AddClass",
-    urlPatterns = {"/enroll"}
+    name = "Search",
+    urlPatterns = {"/search"}
 )
-public class AddClass extends HttpServlet {
+public class Search extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
-		String studentID= request.getParameter("id");
-		String[] courses = request.getParameterValues("selectedCourses");
+		String id = request.getParameter("id");
+	
+		String term = request.getParameter("term");
+		String year = request.getParameter("year");
+		String subject = request.getParameter("subj");
+		String cName = request.getParameter("cName");
+		String cID = request.getParameter("cID");
 		
-		for (int i = 0; i < courses.length; i++) {
-			try {
-				Boolean success = dbc.addCourse(studentID, courses[i]);
-				if (!success) System.out.println("Failed to add " + courses[i] + " for student " + studentID);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		
-		response.sendRedirect("student/home.jsp?id=" + studentID);
-
+		subject.replace(" ", "+");
+		cName.replace(" ", "+");
+		cID.replace(" ", "+");
+	
+	
+		response.sendRedirect("student/search_results.jsp?id=" + id + "&term=" + term +"&year=" + year + "&subj=" + subject + "&cName=" + cName +"&cID=" + cID);
 	}
 }
 

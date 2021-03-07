@@ -368,6 +368,125 @@ public class DatabaseController {
     }
     
     /***************************************************************************************************************************
+     * METHOD: getSearchResults
+     * 
+     * Given an instructorID, this method will return the instructor as a User object.
+     * 
+     * @param String instructorID
+     * @return User user
+     * @throws SQLException
+     */
+    public Vector<Course> getSearchResults(String courseID, String courseName, String term, String year, String subject) throws SQLException {
+        Vector<Course> results = new Vector<Course>();
+        Vector<String> instructorIDs = new Vector<String>();
+        
+        String query = "SELECT * FROM courses WHERE";
+        
+        Boolean hasID = true;
+        Boolean hasName = true;
+        Boolean hasTerm = true;
+        Boolean hasYear = true;
+        Boolean hasSubject = true;
+        
+        Boolean isFirst = true;
+        
+        if (courseID.equals("")) hasID = false;
+        if (courseName.equals("")) hasName = false;
+        if (term.equals("")) hasTerm = false;
+        if (year.equals("")) hasYear = false;
+        if (subject.equals("")) hasSubject = false;
+        
+        System.out.println("CourseID: " + courseID);
+        System.out.println("CourseName: " + courseName);
+        System.out.println("Term: " + term);
+        System.out.println("Year: " + year);
+        System.out.println("Subject: " + subject);
+        
+        if (!hasID && !hasName && !hasTerm && !hasYear && !hasSubject) {
+        	System.out.println("Cannot run an empty search");
+        	return null;
+        }
+        
+        if (hasID) {
+        	System.out.println("detected an ID!");
+        	if (isFirst) {
+        		isFirst = false;
+        		query = query + " course_id = \"" + courseID + "\"";
+        	}
+        	else query = query + " AND course_id = \"" + courseID + "\"";
+        }
+        if (hasName) {
+        	System.out.println("detected a name!");
+        	if (isFirst) {
+        		isFirst = false;
+        		query = query +  " title = \"" + courseName + "\"";
+        	}
+        	else query = query + " AND title = \"" + courseName + "\"";
+        }
+        if (hasTerm) {
+        	System.out.println("detected a term!");
+        	if(isFirst) {
+        		isFirst = false;
+        		query = query + " quarter_offered = \"" + term + "\"";
+        	}
+        	else query = query + " AND quarter_offered = \"" + term + "\"";
+        }
+        if (hasYear) {
+        	System.out.println("detected a year!");
+        	if(isFirst) {
+        		isFirst = false;
+        		query = query + " year_offered = \"" + year + "\"";
+        	}
+        	else query = query + " AND year_offered = \"" + year + "\"";
+        }
+        if (hasSubject) {
+        	System.out.println("detected a subject!");
+        	if(isFirst) {
+        		isFirst = false;
+        		query = query + " major = \"" + subject + "\"";
+        	}
+        	else query = query + " AND major = \"" + subject + "\"";	
+        }
+        
+        System.out.println(query);
+        
+        try {
+            conn = DriverManager.getConnection(url, dbUser, dbPassword);
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                String ID = rs.getString(1);
+                String title = rs.getString(2);
+                String major = rs.getString(3);
+                String instructor = String.format("%010d", rs.getInt(4));
+                Time startTime = rs.getTime(5);
+                Time endTime = rs.getTime(6);
+                String quarterOffered = rs.getString(7);
+                int yearOffered = rs.getInt(8);
+
+                Course course = new Course(ID, title, major, instructor, startTime, endTime, quarterOffered, yearOffered);
+                results.add(course);
+                instructorIDs.add(instructor);
+            }
+        
+        for (int i = 0 ; i < instructorIDs.size(); i++) {
+        	results.elementAt(i).instructor = getInstructor(instructorIDs.elementAt(i)).toString();
+        }
+            
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            conn.close();
+            stmt.close();
+            rs.close();
+        }
+        
+
+        return results;
+    }
+    
+    /***************************************************************************************************************************
      * METHOD: addCourse
      * 
      * Given a studentID and a courseID, adds that course to that student's schedule.
