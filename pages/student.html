@@ -61,6 +61,46 @@
           <input type="text" class="form-control" id="class">
         </div>
         <button style="margin-left: 3%;" id="entry" class="btn btn-secondary" type="submit">Add To Cart</button>
+        <button style="margin-left: 3%;" id="entry" class="btn btn-primary" type="submit" data-toggle="modal" data-target="#exampleModal">Advanced Search</button>
+        
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Advanced Search</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label for="subject-name" class="col-form-label">Subject</label>
+                    <input type="text" class="form-control" id="subject-name">
+                  </div>
+                  <div class="form-group">
+                    <label for="course-number" class="col-form-label">Course Number</label>
+                    <input type="text" class="form-control" id="course-number">
+                  </div>
+                  <div class="form-group">
+                    <label for="term" class="col-form-label">Term</label>
+                    <input type="text" class="form-control" id="term">
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                      Show only open classes
+                    </label>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
         <div id="right" class="col-7">
           <h3>Shopping Cart</h3>
@@ -70,10 +110,6 @@
                 <th>Department</th>
                 <th>Course ID</th>
                 <th>Term</th>
-                <!--<th>Course Description</th>
-                <th>Instructor</th>
-                <th>Time</th>
-                <th>Location</th>-->
             </tr>
         </table>
         <button style="margin-left: 1%;" id="enroll" class="btn btn-secondary" type="submit">Enroll</button>
