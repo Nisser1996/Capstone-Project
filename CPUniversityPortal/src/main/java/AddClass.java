@@ -9,39 +9,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.classes.*;
-
 /******************************************************************************************
  * 
  * @author Hayley Carter
  *
  */
 @WebServlet(
-    name = "DropServlet",
-    urlPatterns = {"/drop"}
+    name = "AddClass",
+    urlPatterns = {"/enroll"}
 )
-public class DropServlet extends HttpServlet {
+public class AddClass extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException {
-		String userID = request.getParameter("id");
-		System.out.println(userID);
-		String[] courseIDs = request.getParameterValues("selectedCourses");
+		String studentID= request.getParameter("id");
+		String[] courses = request.getParameterValues("selectedCourses");
 		
-		for (int i = 0; i < courseIDs.length; i++) {
-			System.out.println(courseIDs[i]);
+		for (int i = 0; i < courses.length; i++) {
 			try {
-				Boolean success = dbc.dropCourse(userID, courseIDs[i]);
-				if (!success) {
-					System.out.println("Failed to drop " + courseIDs[i]);
-				}
+				Boolean success = dbc.addCourse(studentID, courses[i]);
+				if (!success) System.out.println("Failed to add " + courses[i] + " for student " + studentID);
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 		
-		response.sendRedirect("student/home.jsp?id=" + userID);
+		response.sendRedirect("student/home.jsp?id=" + studentID);
+
 	}
 }
 

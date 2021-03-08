@@ -16,18 +16,15 @@ import java.util.Vector;
  *
  */
 @WebServlet(
-    name = "LogoutServlet",
+    name = "Logout",
     urlPatterns = {"/logout"}
 )
-public class LogoutServlet extends HttpServlet {
-	// DatabaseController dbc = new DatabaseController();
+public class Logout extends HttpServlet {
+	// DatabaseController dbc = new DatabaseController(true);
 	
 @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) 
       throws IOException, ServletException {
-	
-		request.getSession().removeAttribute("User");
-
 		response.sendRedirect("index.html");
 	}
 

@@ -1,4 +1,3 @@
-<!--Student Home-->
 <%@ page import="java.util.*" %>
 <%@ page import="com.classes.*" %>
 
@@ -33,13 +32,13 @@
       </div>
     </nav>
   </section>
+  </section>
   <section id="features">
-    <h1 style="margin-left: 2%" class="display-4">Class Search</h1><br>
+    <h1 style="margin-left: 2%" class="display-4">Class Enrollment</h1><br>
 
     <div id="main" class="row">
     <form action = "/search">
-    <input type=hidden name="id" value="<%=userID%>">
-      <div>
+      <div style="margin-left: 1%" id="left" class="col-3">
         <div class="form-group col-md-8">
           <label for="exampleFormControlSelect1">Choose Term</label>
           <select class="form-control" id="selectTerm" name="term">
@@ -65,52 +64,10 @@
           <label for="inputZip">Course Name</label>
           <input type="text" class="form-control" id="class" name="cName">
         </div>
-        <button style="margin-left: 3%;" class="btn btn-secondary" type="submit">Search</button>
+        <button style="margin-left: 3%;" id="entry" class="btn btn-secondary" type="submit">Add To Cart</button>
         </div>
         </form>
         </div>
-    <br>
-    <div style="margin-left: 1%;">
-      <h3>Class Schedule</h3>
-      <form action="../drop">
-      <input type="hidden" name="id" value="<%=userID%>">
-      <table id="display" class= "table table-hover">
-      <tr>
-          <th>Drop?</th>
-          <th>Course ID</th>
-          <th>Title</th>
-          <th>Instructor</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Quarter</th>
-          <th>Year</th>
-      </tr>
-      
-<%
-        DatabaseController dbc = new DatabaseController(true);
-		User user = dbc.getStudent(userID);
-        Vector<Course> schedule = dbc.getStudentSchedule(user.userID);
-        for (int i = 0; i < schedule.size(); i++){ 
-%>
-    	<tr>
-    		  <td><input id="checkBox" type="checkbox" name="selectedCourses" value="<%=schedule.elementAt(i).courseID%>"></td>
-    		  <td><%=schedule.elementAt(i).courseID%></td>
-    		  <td><%=schedule.elementAt(i).title%></td>
-    		  <td><%=schedule.elementAt(i).instructor%></td>
-    		  <td><%=schedule.elementAt(i).startTime.toString()%></td>
-    		  <td><%=schedule.elementAt(i).endTime.toString()%></td>
-    		  <td><%=schedule.elementAt(i).quarterOffered%></td>
-    		  <td><%=schedule.elementAt(i).yearOffered%></td>
-    	</tr>
-    		  
-<%
-    	  }
-%>
-  </table>
-  <button id="drop" class="btn btn-secondary" type="submit">Drop</button>
-  </form>
-  </div>
-  </section>
-  <script src="../JS/script.js"></script>
-</body>
-</html>
+        </section>
+        </body>
+        </html>

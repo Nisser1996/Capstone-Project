@@ -34,82 +34,98 @@
     </nav>
   </section>
   <section id="features">
-    <h1 style="margin-left: 2%" class="display-4">Class Search</h1><br>
 
-    <div id="main" class="row">
-    <form action = "/search">
-    <input type=hidden name="id" value="<%=userID%>">
-      <div>
-        <div class="form-group col-md-8">
-          <label for="exampleFormControlSelect1">Choose Term</label>
-          <select class="form-control" id="selectTerm" name="term">
-          <option>Fall</option>
-          <option>Winter</option>
-          <option>Spring</option>
-          <option>Summer</option>
-        </select>
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Year</label>
-          <input type="text" class="form-control" id="inputYear" name="year">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Subject</label>
-          <input type="text" class="form-control" id="subj" name="subj">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course ID</label>
-          <input type="text" class="form-control" id="class" name="cID">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course Name</label>
-          <input type="text" class="form-control" id="class" name="cName">
-        </div>
-        <button style="margin-left: 3%;" class="btn btn-secondary" type="submit">Search</button>
-        </div>
-        </form>
-        </div>
-    <br>
     <div style="margin-left: 1%;">
-      <h3>Class Schedule</h3>
-      <form action="../drop">
-      <input type="hidden" name="id" value="<%=userID%>">
+      <h3>Course History</h3>
       <table id="display" class= "table table-hover">
       <tr>
-          <th>Drop?</th>
           <th>Course ID</th>
           <th>Title</th>
-          <th>Instructor</th>
-          <th>Start Time</th>
-          <th>End Time</th>
-          <th>Quarter</th>
-          <th>Year</th>
+          <th>Quarter Taken</th>
+          <th>Year Taken</th>
+          <th>Grade</th>
+
       </tr>
       
 <%
         DatabaseController dbc = new DatabaseController(true);
-		User user = dbc.getStudent(userID);
-        Vector<Course> schedule = dbc.getStudentSchedule(user.userID);
+        Vector<Course> schedule = dbc.getStudentHistory(userID);
+        float gpa = 0;
+        int count = 0;
         for (int i = 0; i < schedule.size(); i++){ 
 %>
     	<tr>
-    		  <td><input id="checkBox" type="checkbox" name="selectedCourses" value="<%=schedule.elementAt(i).courseID%>"></td>
     		  <td><%=schedule.elementAt(i).courseID%></td>
     		  <td><%=schedule.elementAt(i).title%></td>
-    		  <td><%=schedule.elementAt(i).instructor%></td>
-    		  <td><%=schedule.elementAt(i).startTime.toString()%></td>
-    		  <td><%=schedule.elementAt(i).endTime.toString()%></td>
     		  <td><%=schedule.elementAt(i).quarterOffered%></td>
     		  <td><%=schedule.elementAt(i).yearOffered%></td>
+    		  <td><%=schedule.elementAt(i).grade%></td>
     	</tr>
     		  
 <%
+			switch (schedule.elementAt(i).grade){
+			case "A+":
+				gpa += 4;
+				count++;
+				break;
+			case "A":
+				gpa += 4;
+				count++;
+				break;
+			case "A-":
+				gpa += 3.7;
+				count++;
+				break;
+			case "B+":
+				gpa += 3.3;
+				count++;
+				break;
+			case "B":
+				gpa += 3;
+				count++;
+				break;
+			case "B-":
+				gpa += 2.7;
+				count++;
+				break;
+			case "C+":
+				gpa += 2.3;
+				count++;	
+				break;
+			case "C":
+				gpa += 2.0;
+				count++;
+				break;
+			case "C-":
+				gpa += 1.7;
+				count++;
+				break;
+			case "D+":
+				gpa += 1.3;
+				count++;
+				break;
+			case "D":
+				gpa += 1;
+				count++;
+				break;
+			case "D-":
+				gpa += .7;
+				count++;
+				break;
+			case "F":
+				count++;
+				break;
+			default:
+			}
     	  }
+        
+        gpa = gpa/count;
 %>
   </table>
-  <button id="drop" class="btn btn-secondary" type="submit">Drop</button>
-  </form>
+  
+  <p>Your GPA is <%=gpa%>.</p>
   </div>
+  
   </section>
   <script src="../JS/script.js"></script>
 </body>

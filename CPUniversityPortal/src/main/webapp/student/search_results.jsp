@@ -1,15 +1,25 @@
-<!--Student Home-->
+<!--Faculty Home-->
 <%@ page import="java.util.*" %>
 <%@ page import="com.classes.*" %>
 
 
-<%String userID = request.getParameter("id");
-%>
+<%	String userID = request.getParameter("id");
+	String term = request.getParameter("term");
+	String year = request.getParameter("year");
+	String subject = request.getParameter("subj");
+	String cName = request.getParameter("cName");
+	String cID = request.getParameter("cID");
+	
+	subject.replace("+", " ");
+	cName.replace("+", " ");
+	cID.replace("+", " ");
+	
+	%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iAcademic | Student Portal</title>
+    <title>iAcademic | Faculty Portal</title>
     <link rel="icon" href="../images/iAcademic2.ico" type="image/icon type">
     <link rel="stylesheet" href="../CSS/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
@@ -34,49 +44,13 @@
     </nav>
   </section>
   <section id="features">
-    <h1 style="margin-left: 2%" class="display-4">Class Search</h1><br>
-
-    <div id="main" class="row">
-    <form action = "/search">
-    <input type=hidden name="id" value="<%=userID%>">
-      <div>
-        <div class="form-group col-md-8">
-          <label for="exampleFormControlSelect1">Choose Term</label>
-          <select class="form-control" id="selectTerm" name="term">
-          <option>Fall</option>
-          <option>Winter</option>
-          <option>Spring</option>
-          <option>Summer</option>
-        </select>
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Year</label>
-          <input type="text" class="form-control" id="inputYear" name="year">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Subject</label>
-          <input type="text" class="form-control" id="subj" name="subj">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course ID</label>
-          <input type="text" class="form-control" id="class" name="cID">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course Name</label>
-          <input type="text" class="form-control" id="class" name="cName">
-        </div>
-        <button style="margin-left: 3%;" class="btn btn-secondary" type="submit">Search</button>
-        </div>
-        </form>
-        </div>
-    <br>
     <div style="margin-left: 1%;">
-      <h3>Class Schedule</h3>
-      <form action="../drop">
+      <h2 class="display-4">Search Results</h2>
+      <form action = "/enroll">
       <input type="hidden" name="id" value="<%=userID%>">
       <table id="display" class= "table table-hover">
       <tr>
-          <th>Drop?</th>
+          <th>Enroll?</th>
           <th>Course ID</th>
           <th>Title</th>
           <th>Instructor</th>
@@ -89,28 +63,27 @@
 <%
         DatabaseController dbc = new DatabaseController(true);
 		User user = dbc.getStudent(userID);
-        Vector<Course> schedule = dbc.getStudentSchedule(user.userID);
-        for (int i = 0; i < schedule.size(); i++){ 
+        Vector<Course> results = dbc.getSearchResults(cID, cName, term, year, subject);
+        for (int i = 0; i < results.size(); i++){ 
 %>
     	<tr>
-    		  <td><input id="checkBox" type="checkbox" name="selectedCourses" value="<%=schedule.elementAt(i).courseID%>"></td>
-    		  <td><%=schedule.elementAt(i).courseID%></td>
-    		  <td><%=schedule.elementAt(i).title%></td>
-    		  <td><%=schedule.elementAt(i).instructor%></td>
-    		  <td><%=schedule.elementAt(i).startTime.toString()%></td>
-    		  <td><%=schedule.elementAt(i).endTime.toString()%></td>
-    		  <td><%=schedule.elementAt(i).quarterOffered%></td>
-    		  <td><%=schedule.elementAt(i).yearOffered%></td>
+    		<td><input id="checkBox" type="checkbox" name="selectedCourses" value="<%=results.elementAt(i).courseID%>"></td>
+    		  <td><%=results.elementAt(i).courseID%></td>
+    		  <td><%=results.elementAt(i).title%></td>
+    		  <td><%=results.elementAt(i).instructor%></td>
+    		  <td><%=results.elementAt(i).startTime.toString()%></td>
+    		  <td><%=results.elementAt(i).endTime.toString()%></td>
+    		  <td><%=results.elementAt(i).quarterOffered%></td>
+    		  <td><%=results.elementAt(i).yearOffered%></td>
     	</tr>
     		  
 <%
     	  }
 %>
   </table>
-  <button id="drop" class="btn btn-secondary" type="submit">Drop</button>
+  <button id="drop" class="btn btn-secondary" type="submit">Add</button>
   </form>
-  </div>
+    </div>
   </section>
-  <script src="../JS/script.js"></script>
 </body>
 </html>
