@@ -76,6 +76,7 @@
       <input type="hidden" name="id" value="<%=userID%>">
       <table id="display" class= "table table-hover">
       <tr>
+          <th>Drop?</th>
           <th>Course ID</th>
           <th>Title</th>
           <th>Instructor</th>
