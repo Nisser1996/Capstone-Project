@@ -416,4 +416,84 @@ public class databaseController {
         return true;
     }
 
+    public boolean isValidFaculty(String facultyID) throws SQLException {
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            statement = con.createStatement();
+            // check if the user exists in the login field
+            rs = statement.executeQuery("SELECT COUNT(1) FROM faculty WHERE id=\"" + facultyID + "\"");
+            boolean userExists = false;
+            while (rs.next()) {
+                userExists = true;
+            }
+            if (!userExists)
+                return false;
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+            statement.close();
+            rs.close();
+        }
+        return true;
+    }
+
+    public boolean changePassword(String userID, String oldPassword, String newPassword) throws SQLException {
+        int ret = 0;
+        AuthenticationManager authman = new AuthenticationManager(this);
+        if(!authman.login(userID, oldPassword)) {
+            return false;
+        }
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            String updateString =
+                    "UPDATE login SET hash=?, salt=? WHERE userid=?";
+            PreparedStatement updatePassword = con.prepareStatement(updateString);
+            LoginData data = new LoginData();
+            data.userID = userID;
+            data.salt = AuthenticationManager.getSalt();
+            data.hash = AuthenticationManager.getSecurePassword( newPassword, data.salt);
+            updatePassword.setString(1, data.hash);
+            updatePassword.setBytes(2, data.salt);
+            updatePassword.setString(3, data.userID);
+            ret = updatePassword.executeUpdate();
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+            statement.close();
+            rs.close();
+        }
+        return (ret > 0);
+    }
+    public boolean changePasswordOverride(String facultyID, String userID, String newPassword) throws SQLException {
+        int ret = 0;
+        if(!isValidFaculty(facultyID))
+            return false;
+        try {
+            con = DriverManager.getConnection(url, dbUser, dbPassword);
+            String updateString =
+                    "UPDATE login SET hash=?, salt=? WHERE userid=?";
+            PreparedStatement updatePassword = con.prepareStatement(updateString);
+            LoginData data = new LoginData();
+            data.userID = userID;
+            data.salt = AuthenticationManager.getSalt();
+            data.hash = AuthenticationManager.getSecurePassword( newPassword, data.salt);
+            updatePassword.setString(1, data.hash);
+            updatePassword.setBytes(2, data.salt);
+            updatePassword.setString(3, data.userID);
+            ret = updatePassword.executeUpdate();
+
+        } catch (SQLException e) {
+            throw e;
+        } finally {
+            con.close();
+            statement.close();
+            rs.close();
+        }
+        return (ret > 0);
+    }
+
 }

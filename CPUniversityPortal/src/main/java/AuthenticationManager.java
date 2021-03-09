@@ -62,6 +62,35 @@ public class AuthenticationManager {
         return new RegistrationData(UserID, randPassword);
     }
 
+    public String ResetPasswordOverride(String FacultyID, String FacultyPassword, String UserId) {
+        boolean changeComplete = false;
+        String newPassword = generateRandomPassword();
+        try {
+            if(login(FacultyID, FacultyPassword) && dbc.isValidFaculty(FacultyID)){
+                changeComplete = dbc.changePasswordOverride(FacultyID, UserId, newPassword);
+            }
+
+        } catch (SQLException e) {
+            // TODO
+        }
+        if(changeComplete)
+            return newPassword;
+        return "";
+    }
+
+    public boolean changeUserPassword(String UserID, String OldPassword, String NewPassword){
+        boolean changeComplete = false;
+        try {
+            if(login(UserID, OldPassword)){
+                changeComplete = dbc.changePassword(UserID, OldPassword, NewPassword);
+            }
+        } catch (SQLException e) {
+            // TODO
+        }
+        return changeComplete;
+    }
+
+
     public boolean addUserForTesting(String UserID) {
         byte[] salt = getSalt();
         String hash = getSecurePassword("password", salt);
