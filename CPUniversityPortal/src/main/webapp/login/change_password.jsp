@@ -1,4 +1,4 @@
-<!--Faculty Login-->
+  <!--Faculty Login-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,19 +32,21 @@
         </ul>
       </div>
     </nav>
-  </section>
-  <section class="body_align">
-    <form class="form-signin" action="../tAuth">
-        <img src="../images/iAcademic.ico" alt="iAcademic icon" width="72" height="72">
-        <h2>Sign in below</h2>
-        <label for="ID" class="sr-only">Faculty ID</label>
-        <input type="text" id="ID" name="tID" class="form-control" placeholder="Faculty ID" required autofocus><br>
-        <label for="password" class="sr-only">Password</label>
-        <input type="password" id="password" name = tPassword class="form-control" placeholder="Password" required autofocus><br>
-        <a href="change_password.jsp">Change Password</a><br><br>
-        <button class="btn btn-lg btn-dark btn-block" type="submit">Sign in</button>
-    </form>
-  </section>
-  
-</body>
-</html>
+    <form action = "/change_password">
+      <div style="margin-left: 1%" id="left" class="col-3">
+        <div class="form-group col-md-8">
+          <label for="inputZip">User ID</label>
+          <input type="text" class="form-control" id="inputID" name="id">
+        </div>
+        <div class="form-group col-md-8">
+          <label for="inputZip">Old Password</label>
+          <input type="password" id="password" name = old class="form-control" placeholder="Password" required autofocus><br>
+        </div>
+        <div class="form-group col-md-8">
+          <label for="inputZip">New Password</label>
+          <input type="password" id="password" name = new class="form-control" placeholder="Password" required autofocus><br>
+        </div>
+        </div>
+        </form>
+        </section>
+        </body>
