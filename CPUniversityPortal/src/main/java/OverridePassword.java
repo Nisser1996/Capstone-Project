@@ -15,10 +15,10 @@ import com.classes.DatabaseController;
  *
  */
 @WebServlet(
-    name = "ChangePassword",
-    urlPatterns = {"/change_password"}
+    name = "OverridePassword",
+    urlPatterns = {"/override_password"}
 )
-public class ChangePassword extends HttpServlet {
+public class OverridePassword extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);
 	
 @Override
@@ -26,23 +26,23 @@ public class ChangePassword extends HttpServlet {
       throws IOException, ServletException {
 	
 		String id = request.getParameter("id");
-		String old = request.getParameter("old");
-		String password = request.getParameter("new");
+		String sID = request.getParameter("sID");
+		String sPass = request.getParameter("sPassword");
 		
 		Boolean success = false;
 		try {
-			success= dbc.changePassword(id, old, password);
+			success= dbc.changePasswordOverride(id, sID, sPass);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		if (success) {
 			System.out.println("success!");
-			response.sendRedirect("../index.html");
+			response.sendRedirect("faculty/home.jsp?id=" +id);
 			
 		}
 		else{
 			System.out.println("failure!");
-		response.sendRedirect("login/change_password.jsp");
+			response.sendRedirect("faculty/generate_login.jsp?id=" +id);
 		}
 	}
 
