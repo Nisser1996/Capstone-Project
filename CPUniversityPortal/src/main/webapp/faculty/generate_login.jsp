@@ -1,9 +1,10 @@
-<%@ page import="java.util.*" %>
-<%@ page import="com.classes.*" %>
+<%@ page import="java.util.*" %>>
+<%@ page import="com.classes.*" %>>
 
 
-<%String userID = request.getParameter("id");
-%>
+	<%	
+	String userID = request.getParameter("id");
+	%>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,48 +27,27 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item"><a class="nav-link" href="home.jsp?id=<%=userID%>">Home <span class="sr-only">(current)</span></a></li>
-          <li class="nav-item"><a class="nav-link" href="courseHistory.jsp?id=<%=userID%>">Course History <span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=a">Add Student<span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=d">Drop Student<span class="sr-only"></span></a></li>
+          <li class="nav-item"><a class="nav-link" href="class_select.jsp?id=<%=userID%>&action=g">Grade Submission<span class="sr-only"></span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="generate_login.jsp?id=<%=userID%>">Student Password Override<span class="sr-only"></span></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Log Out<span class="sr-only"></span></a></li>
         </ul>
       </div>
     </nav>
   </section>
-  </section>
   <section id="features">
-    <h1 style="margin-left: 2%" class="display-4">Class Enrollment</h1><br>
-
-    <div id="main" class="row">
-    <form action = "/search">
-      <div style="margin-left: 1%" id="left" class="col-3">
+  <form action= "/override_password">
+        <div style="margin-left: 1%" id="left" class="col-3">
         <div class="form-group col-md-8">
-          <label for="exampleFormControlSelect1">Choose Term</label>
-          <select class="form-control" id="selectTerm" name="term">
-          <option>Fall</option>
-          <option>Winter</option>
-          <option>Spring</option>
-          <option>Summer</option>
-        </select>
+          <label for="inputStudent">Student ID</label>
+          <input type="text" class="form-control" id="inputStudent" name="sID">
+          <label for="inputPassword">New Password</label>
+          <input type="text" class="form-control" id="inputPassword" name="sPassword">
+          <input type="hidden" value="<%=userID%>" name="id">
         </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Year</label>
-          <input type="text" class="form-control" id="inputYear" name="year">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Subject</label>
-          <input type="text" class="form-control" id="subj" name="subj">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course ID</label>
-          <input type="text" class="form-control" id="class" name="cID">
-        </div>
-        <div class="form-group col-md-8">
-          <label for="inputZip">Course Name</label>
-          <input type="text" class="form-control" id="class" name="cName">
-        </div>
-        <button style="margin-left: 3%;" id="entry" class="btn btn-secondary" type="submit">Add To Cart</button>
+        <button style="margin-left: 3%;" id="entry" class="btn btn-secondary" type="submit">Change Student Password</button>
         </div>
         </form>
-        </div>
-        </section>
-        </body>
-        </html>
+  </section>
+</body>

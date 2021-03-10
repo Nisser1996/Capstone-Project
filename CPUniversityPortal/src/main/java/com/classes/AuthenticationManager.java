@@ -77,12 +77,40 @@ public class AuthenticationManager {
         return password.toString();
     }
 
-    // DO NOT ALTER
-    private static String getSecurePassword(String password, byte[] salt) {
-
-        String generatedPassword = null;
+    public String ResetPasswordOverride(String FacultyID, String FacultyPassword, String UserId) {
+        boolean changeComplete = false;
+        String newPassword = generateRandomPassword();
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            if(login(FacultyID, FacultyPassword) && dbc.isValidFaculty(FacultyID)){
+                changeComplete = dbc.changePasswordOverride(FacultyID, UserId, newPassword);
+            }
+
+        } catch (SQLException e) {
+            // TODO
+        }
+        if(changeComplete)
+            return newPassword;
+        return "";
+    }
+    
+    public boolean changeUserPassword(String UserID, String OldPassword, String NewPassword){
+        boolean changeComplete = false;
+        try {
+            if(login(UserID, OldPassword)){
+                changeComplete = dbc.changePassword(UserID, OldPassword, NewPassword);
+            }
+        } catch (SQLException e) {
+            // TODO
+        }
+        return changeComplete;
+    }
+    
+    // DO NOT ALTER
+    public static String getSecurePassword(String password, byte[] salt) {
+
+        String generatedPassword = "";
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(salt);
             byte[] bytes = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();
@@ -97,11 +125,12 @@ public class AuthenticationManager {
     }
 
     // DO NOT ALTER
-    private static byte[] getSalt() {
+    public static byte[] getSalt() {
         SecureRandom random = new SecureRandom();
         byte[] salt = new byte[16];
         random.nextBytes(salt);
         return salt;
     }
+   
 
 }
