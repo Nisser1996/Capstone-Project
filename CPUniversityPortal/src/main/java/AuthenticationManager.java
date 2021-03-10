@@ -112,7 +112,7 @@ public class AuthenticationManager {
         SecureRandom random = new SecureRandom();
         String ret = "";
         // palette of viable human-typeable characters for our random passwords
-        char[] palette = "abcdefghijklmnopqrstuvvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()?.".toCharArray();
+        char[] palette = "abcdefghijklmnopqrstuvvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()?".toCharArray();
         StringBuilder password = new StringBuilder();
         // generate a 15 character password
         for(int i = 0; i < 15; i++) {
@@ -128,7 +128,7 @@ public class AuthenticationManager {
 
         String generatedPassword = null;
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(salt);
             byte[] bytes = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();

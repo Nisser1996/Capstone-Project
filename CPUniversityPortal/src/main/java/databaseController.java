@@ -351,43 +351,6 @@ public class databaseController {
         return data.userID;
     }
 
-
-    // TODO: REMOVE WHEN TEST DATABASE COMPLETE
-    public void CreateLoginsForExistingUsers() throws SQLException{
-        Vector<LoginData> ldVec = new Vector<>();
-
-        try {
-            con = DriverManager.getConnection(url, dbUser, dbPassword);
-            statement = con.createStatement();
-
-            rs = statement.executeQuery("SELECT student_id FROM students WHERE students.student_id NOT IN ( SELECT userid FROM login);");
-            while (rs.next()) {
-                LoginData data = new LoginData();
-                data.userID = String.format("%05d", rs.getInt("student_id"));
-                data.salt = AuthenticationManager.getSalt();
-                data.hash = AuthenticationManager.getSecurePassword("password", data.salt);
-                ldVec.add(data);
-            }
-        } catch (SQLException e) {
-            con.close();
-            throw e;
-        } finally {
-            statement.close();
-            rs.close();
-        }
-        String updateString =
-                "INSERT INTO login (userid, hash, salt) values (? , ? , ? )";
-        PreparedStatement addToDatabase = con.prepareStatement(updateString);
-        for(LoginData data : ldVec){
-            addToDatabase.setInt(1, Integer.parseInt(data.userID));
-            addToDatabase.setString(2, data.hash);
-            addToDatabase.setBytes(3, data.salt);
-            addToDatabase.executeUpdate();
-        }
-        con.close();
-
-    }
-
     public boolean addNewStudent(String studentID, String firstName, String lastName) throws SQLException {
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
@@ -442,7 +405,7 @@ public class databaseController {
     public boolean changePassword(String userID, String oldPassword, String newPassword) throws SQLException {
         int ret = 0;
         AuthenticationManager authman = new AuthenticationManager(this);
-        if(!authman.login(userID, oldPassword)) {
+        if (!authman.login(userID, oldPassword)) {
             return false;
         }
         try {
@@ -453,7 +416,7 @@ public class databaseController {
             LoginData data = new LoginData();
             data.userID = userID;
             data.salt = AuthenticationManager.getSalt();
-            data.hash = AuthenticationManager.getSecurePassword( newPassword, data.salt);
+            data.hash = AuthenticationManager.getSecurePassword(newPassword, data.salt);
             updatePassword.setString(1, data.hash);
             updatePassword.setBytes(2, data.salt);
             updatePassword.setString(3, data.userID);
@@ -468,9 +431,10 @@ public class databaseController {
         }
         return (ret > 0);
     }
+
     public boolean changePasswordOverride(String facultyID, String userID, String newPassword) throws SQLException {
         int ret = 0;
-        if(!isValidFaculty(facultyID))
+        if (!isValidFaculty(facultyID))
             return false;
         try {
             con = DriverManager.getConnection(url, dbUser, dbPassword);
@@ -480,7 +444,7 @@ public class databaseController {
             LoginData data = new LoginData();
             data.userID = userID;
             data.salt = AuthenticationManager.getSalt();
-            data.hash = AuthenticationManager.getSecurePassword( newPassword, data.salt);
+            data.hash = AuthenticationManager.getSecurePassword(newPassword, data.salt);
             updatePassword.setString(1, data.hash);
             updatePassword.setBytes(2, data.salt);
             updatePassword.setString(3, data.userID);
