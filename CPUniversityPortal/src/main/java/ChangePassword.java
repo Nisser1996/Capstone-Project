@@ -16,7 +16,7 @@ import com.classes.DatabaseController;
  */
 @WebServlet(
     name = "ChangePassword",
-    urlPatterns = {"/change_password"}
+    urlPatterns = {"/student_override"}
 )
 public class ChangePassword extends HttpServlet {
 	DatabaseController dbc = new DatabaseController(true);

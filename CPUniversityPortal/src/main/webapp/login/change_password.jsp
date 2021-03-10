@@ -32,10 +32,12 @@
         </ul>
       </div>
     </nav>
+    </section>
+    <section class="body_align">
     <form action = "/change_password">
-      <div style="margin-left: 1%" id="left" class="col-3">
+      <div>
         <div class="form-group col-md-8">
-          <label for="inputZip">User ID</label>
+          <label for="inputZip">Your User ID</label>
           <input type="text" class="form-control" id="inputID" name="id">
         </div>
         <div class="form-group col-md-8">
@@ -46,6 +48,7 @@
           <label for="inputZip">New Password</label>
           <input type="password" id="password" name = new class="form-control" placeholder="Password" required autofocus><br>
         </div>
+		<button id="entry" class="btn btn-secondary" type="submit">Submit</button>
         </div>
         </form>
         </section>

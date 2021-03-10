@@ -108,9 +108,9 @@ public class AuthenticationManager {
     // DO NOT ALTER
     public static String getSecurePassword(String password, byte[] salt) {
 
-        String generatedPassword = null;
+        String generatedPassword = "";
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
             md.update(salt);
             byte[] bytes = md.digest(password.getBytes());
             StringBuilder sb = new StringBuilder();
